@@ -11,13 +11,16 @@ import javax.swing.UIManager;
  * @author AKolchev
  */
 public class MainFrame extends JFrame {
-
+    
+    private TablePanel tablePanel;
+    
     /**
      * MainFrame constructor
      * Initializes all necessary components
      */
     public MainFrame() {
         super("Music Manager");
+        this.tablePanel = new TablePanel();
         
         setLookAndFeel();
     }
