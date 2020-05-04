@@ -15,7 +15,6 @@ public class App {
      * @param args initial input arguments
      */
     public static void main(String[] args) {
-        
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
