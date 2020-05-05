@@ -7,7 +7,12 @@ package controllers;
 
 import fileAccessLayer.FileOperations;
 import java.io.File;
+import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.MusicFileTags;
 
 /**
@@ -17,14 +22,18 @@ import models.MusicFileTags;
 public class Controller {
     FileOperations fo = new FileOperations(); 
     
-    public List<MusicFileTags> getMusicFilesTags(){
+    public LinkedHashMap<String, MusicFileTags> getMusicFilesTags(){
        return fo.getMusicFilesTags();
     }
-    public static void loadMusicFiles(File[] selectedFiles) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void loadMusicFiles(File[] selectedFiles) {
+        try {
+            fo.loadMusicFiles(selectedFiles);
+        } catch (IOException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    public static void saveToFile(File selectedFile) {
+    public void saveToFile(File selectedFile) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

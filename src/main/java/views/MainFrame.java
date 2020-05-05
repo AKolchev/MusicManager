@@ -54,12 +54,15 @@ public class MainFrame extends JFrame {
 
         tablePanel.setData(controller.getMusicFilesTags());
         tablePanel.setPersonTableListener(new MusicFilesTableListener() {
+            @Override
             public void rowDeleted(int row) {
                 controller.removeMusicFile(row);
             }
         });
 
         fileChooser.setFileFilter(new ImportSongsFileFilter());
+        fileChooser.setMultiSelectionEnabled(true);
+        
         toolbar.setToolbarListener(new ToolbarEventListener() {
 
             @Override

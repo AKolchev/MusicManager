@@ -19,12 +19,7 @@ public class MusicFileTags implements Serializable {
     private String artist;
     private String genre;
 
-    public MusicFileTags(String name, String artist, String genre) {
-        this.name = name;
-        this.artist = artist;
-        this.genre = genre;
-        this.Id = MusicFileTags.count;
-
+    public MusicFileTags() {
         MusicFileTags.count++;
     }
 

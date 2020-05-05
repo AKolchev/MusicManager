@@ -10,7 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -71,10 +73,10 @@ public class TablePanel extends JTable{
     }
     
     void refresh() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        tableModel.fireTableDataChanged();
     }
     
-    public void setData(List<MusicFileTags> fo) {
+    public void setData(LinkedHashMap<String, MusicFileTags> fo) {
         tableModel.setData(fo);
     }
     public void setPersonTableListener(MusicFilesTableListener listener){

@@ -7,15 +7,18 @@ package fileAccessLayer;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.InputStream;
+import java.util.LinkedHashMap;
 import models.MusicFileTags;
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.Parser;
+import org.apache.tika.parser.mp3.Mp3Parser;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  *
@@ -23,51 +26,62 @@ import models.MusicFileTags;
  */
 public class FileOperations {
 
-    private List<MusicFileTags> musicFilesTags;
+    private LinkedHashMap<String, MusicFileTags> musicFilesTags;
 
     public FileOperations() {
-        this.musicFilesTags = new LinkedList<>();
+        this.musicFilesTags = new LinkedHashMap<>();
     }
 
-    public void addPerson(MusicFileTags musicFileTags) {
-        musicFilesTags.add(musicFileTags);
+    public void addMusicFiles(MusicFileTags musicFileTags, String fileName) {
+
+        musicFilesTags.put(fileName, musicFileTags);
     }
 
     /**
      *
      * @return
      */
-    public List<MusicFileTags> getMusicFilesTags() {
-        return Collections.unmodifiableList(musicFilesTags);//Makes the collection unmodifiable, because otherwise the private collection is exposed by ref.
+    public LinkedHashMap<String, MusicFileTags> getMusicFilesTags() {
+        return musicFilesTags;//Makes the collection unmodifiable, because otherwise the private collection is exposed by ref.
     }
 
     public void saveToFile(File file) throws IOException {
-        FileOutputStream fos = new FileOutputStream(file);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
 
-        MusicFileTags[] persons = musicFilesTags.toArray(new MusicFileTags[musicFilesTags.size()]);
-
-        oos.writeObject(persons);
-
-        oos.close();
     }
 
-    public void loadFromFile(File file) throws IOException {
-        FileInputStream fis = new FileInputStream(file);
-        var ois = new ObjectInputStream(fis);
+    public void loadMusicFiles(File[] files) throws IOException {
+        
+        ContentHandler handler = new DefaultHandler();
+        Metadata metadata = new Metadata();
+        Parser parser = new Mp3Parser();
+        ParseContext parseCtx = new ParseContext();
+        InputStream input;
 
-        try {
-            MusicFileTags[] persons = (MusicFileTags[]) ois.readObject();
-            musicFilesTags.clear();
-            musicFilesTags.addAll(Arrays.asList(persons));
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+        for (File file : files) {
+            try {
+                input = new FileInputStream(file);
+                parser.parse(input, handler, metadata, parseCtx);
+                input.close();
+                // metadata.set("xmpDM:artist", "Joe Satriani, Steve Vai");
+                // System.out.println("Title: " + metadata.get("title"));
+                // System.out.println("Artists: " + metadata.get("xmpDM:artist"));
+                String[] metadataNames = metadata.names();
+
+                for (String name : metadataNames) {
+                    System.out.println(name + ": " + metadata.get(name));
+                }
+                MusicFileTags fileTags = new MusicFileTags();
+                fileTags.setName(file.getName());
+                fileTags.setArtist(metadata.get("xmpDM:artist"));
+                fileTags.setGenre(metadata.get("xmpDM:genre"));
+
+                musicFilesTags.put(file.getCanonicalPath(), fileTags);
+            } catch (IOException | SAXException | TikaException e) {
+            }
         }
-
-        ois.close();
     }
 
-    public void removePerson(int row) {
+    public void removeMusicFile(int row) {
         musicFilesTags.remove(row);
     }
 }

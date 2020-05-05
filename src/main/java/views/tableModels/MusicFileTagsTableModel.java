@@ -5,7 +5,10 @@
  */
 package views.tableModels;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.table.AbstractTableModel;
 import models.MusicFileTags;
 
@@ -14,7 +17,7 @@ import models.MusicFileTags;
  * @author mgkon
  */
 public class MusicFileTagsTableModel extends AbstractTableModel {
-    private List<MusicFileTags> fo;
+    private LinkedHashMap<String, MusicFileTags> fo;
     private String[] colNames = {"Id", "Name", "Artist", "Genre"};
     
     public MusicFileTagsTableModel(){
@@ -34,7 +37,7 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
     @Override
     public void setValueAt(Object value, int row, int col){
         if(fo!=null){
-            MusicFileTags fileTags = fo.get(row);
+            MusicFileTags fileTags = (new ArrayList<MusicFileTags>(fo.values())).get(row);
             switch(col){
                 case 1:
                     fileTags.setName((String)value);
@@ -58,7 +61,7 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
         }
     }
     
-    public void setData(List<MusicFileTags> data){
+    public void setData(LinkedHashMap<String, MusicFileTags> data){
         this.fo = data;
     }
     
@@ -91,17 +94,17 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int row, int column) {
         
-        MusicFileTags musicFileTags = fo.get(row);
+        MusicFileTags fileTags = (new ArrayList<MusicFileTags>(fo.values())).get(row);
         
         switch(column){
             case 0:
-                return musicFileTags.getId();
+                return fileTags.getId();
             case 1:
-                return musicFileTags.getName();
+                return fileTags.getName();
             case 2:
-                return musicFileTags.getArtist();
+                return fileTags.getArtist();
             case 3:
-                return musicFileTags.getGenre();
+                return fileTags.getGenre();
         }
         
         return null;
