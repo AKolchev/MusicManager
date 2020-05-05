@@ -30,18 +30,19 @@ import views.utils.ImportSongsFileFilter;
  * @author AKolchev, f55283
  */
 public class MainFrame extends JFrame {
-    
+
     private Toolbar toolbar;
     private JFileChooser fileChooser;
     private Controller controller;
     private TablePanel tablePanel;
-  
+
     /**
-     * MainFrame constructor
-     * Initializes all necessary components
+     * MainFrame constructor Initializes all necessary components
      */
     public MainFrame() {
         super("Music Manager");
+        setLookAndFeel();
+        
         setLayout(new BorderLayout());
 
         setJMenuBar(createMenuBar());
@@ -63,7 +64,7 @@ public class MainFrame extends JFrame {
 
             @Override
             public void addMusicFilesEvent() {
-                
+
                 //controller.addPerson(newDummyEvent);
             }
 
@@ -72,7 +73,7 @@ public class MainFrame extends JFrame {
                 tablePanel.refresh();
             }
         });
-        
+
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent arg0) {
                 //close any files
@@ -83,15 +84,13 @@ public class MainFrame extends JFrame {
 
         add(tablePanel, BorderLayout.CENTER);
         add(toolbar, BorderLayout.PAGE_START);
-        
+
         setMinimumSize(new Dimension(500, 400));
         setSize(600, 500);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setVisible(true);
-        
-        setLookAndFeel();
     }
-    
+
     /**
      * Sets Nimbus UI as application theme
      */
@@ -107,9 +106,9 @@ public class MainFrame extends JFrame {
             //Nimbus has not been found. Default theme will be used.
         }
     }
-    
+
     private JMenuBar createMenuBar() {
-        
+
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenuItem importMenuItem = new JMenuItem("Import tracks...");
@@ -126,11 +125,11 @@ public class MainFrame extends JFrame {
         JMenuItem fullScreenMenu = new JMenuItem("Full Screen");
         JCheckBoxMenuItem showToolbarMenuItem = new JCheckBoxMenuItem("Show Toolbar");
         showToolbarMenuItem.setSelected(true);
-       
+
         viewMenu.add(fullScreenMenu);
         viewMenu.add(showToolbarMenuItem);
         menuBar.add(viewMenu);
-        
+
         showToolbarMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -145,8 +144,8 @@ public class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
                     //try {
-                        controller.loadMusicFiles(fileChooser.getSelectedFiles());
-                        tablePanel.refresh();
+                    controller.loadMusicFiles(fileChooser.getSelectedFiles());
+                    tablePanel.refresh();
                     //} catch (IOException ex) {
                     //    JOptionPane.showMessageDialog(MainFrame.this, ex, "Exception while loading files", JOptionPane.ERROR_MESSAGE);
                     //}
@@ -159,7 +158,7 @@ public class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
                     //try {
-                        controller.saveToFile(fileChooser.getSelectedFile());
+                    controller.saveToFile(fileChooser.getSelectedFile());
                     //} catch (IOException ex) {
                     //    JOptionPane.showMessageDialog(MainFrame.this, ex, "Exception while exporting file", JOptionPane.ERROR_MESSAGE);
                     //}
@@ -182,13 +181,13 @@ public class MainFrame extends JFrame {
                 }
             }
         });
-        
+
         fileMenu.setMnemonic(KeyEvent.VK_F);
         importMenuItem.setMnemonic(KeyEvent.VK_I);
         exportMenuItem.setMnemonic(KeyEvent.VK_E);
         exitMenuItem.setMnemonic(KeyEvent.VK_X);
         exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
-        
+
         return menuBar;
     }
 }
