@@ -5,66 +5,72 @@
  */
 package views.tableModels;
 
+import events.MusicFileEditEventData;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import javax.swing.table.AbstractTableModel;
-import models.MusicFileTags;
+import models.MusicFileTag;
+import models.MusicGenre;
+import org.jaudiotagger.tag.reference.GenreTypes;
+import views.interfaces.TableRowEditedListener;
 
 /**
  *
  * @author mgkon
  */
 public class MusicFileTagsTableModel extends AbstractTableModel {
-    private LinkedHashMap<String, MusicFileTags> fo;
-    private String[] colNames = {"Id", "Name", "Artist", "Genre"};
-    
-    public MusicFileTagsTableModel(){
+
+    private TableRowEditedListener tableRowEditedListener;
+
+    private LinkedList<MusicFileTag> fo;
+    private String[] colNames = {"FileLocation", "Name", "Artist", "Genre"};
+
+    public MusicFileTagsTableModel() {
 
     }
-    
+
     @Override
-    public String getColumnName(int column){
+    public String getColumnName(int column) {
         return colNames[column];
     }
-    
+
     @Override
-    public boolean isCellEditable(int row, int col){
-       return col>0;
+    public boolean isCellEditable(int row, int col) {
+        return col > 1;
     }
-    
+
     @Override
-    public void setValueAt(Object value, int row, int col){
-        if(fo!=null){
-            MusicFileTags fileTags = (new ArrayList<MusicFileTags>(fo.values())).get(row);
-            switch(col){
-                case 1:
-                    fileTags.setName((String)value);
-                    break;
+    public void setValueAt(Object value, int row, int col) {
+        if (fo != null) {
+            MusicFileTag fileTags = fo.get(row);
+            MusicFileEditEventData eventData = new MusicFileEditEventData(this);
+            eventData.setFileLocation(fileTags.getFileLocation());
+            switch (col) {
                 case 2:
-                    fileTags.setArtist((String)value);
+                    fileTags.setArtist((String) value);
+                    eventData.setArtist((String) value);
                     break;
                 case 3:
-                    try{
-                        //person.setAgeCategory(AgeCategoryEnum.valueOf((String)value));
-                        //person.setAgeCategory((AgeCategoryEnum)value);
-                        fileTags.setGenre((String)value);
-                    }
-                    catch(Exception ex){
-                        
-                    }
+                    Integer genreId = GenreTypes.getInstanceOf().getIdForName((String)value);
+                    MusicGenre musicGenre = new MusicGenre(genreId, GenreTypes.getInstanceOf().getValueForId(genreId));
+                    List<MusicGenre> genres = new ArrayList<MusicGenre>();
+                    genres.add(musicGenre);
+                    
+                    fileTags.setGenre(genres);
+                    eventData.setGenre(musicGenre);
                     break;
                 default:
                     break;
             }
+            tableRowEditedListener.tableRowEdited(eventData);
         }
     }
-    
-    public void setData(LinkedHashMap<String, MusicFileTags> data){
+
+    public void setData(LinkedList<MusicFileTag> data) {
         this.fo = data;
     }
-    
+
     @Override
     public int getRowCount() {
         return fo.size();
@@ -76,29 +82,29 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
     }
 
     @Override
-    public Class<?> getColumnClass(int col){
-        switch(col){
+    public Class<?> getColumnClass(int col) {
+        switch (col) {
             case 0:
-                return Integer.class;
+                return String.class;
             case 1:
                 return String.class;
             case 2:
                 return String.class;
             case 3:
-                return String.class;
+                return MusicGenre.class;
             default:
                 return null;
         }
     }
-    
+
     @Override
     public Object getValueAt(int row, int column) {
-        
-        MusicFileTags fileTags = (new ArrayList<MusicFileTags>(fo.values())).get(row);
-        
-        switch(column){
+
+        MusicFileTag fileTags = fo.get(row);
+
+        switch (column) {
             case 0:
-                return fileTags.getId();
+                return fileTags.getFileLocation();
             case 1:
                 return fileTags.getName();
             case 2:
@@ -106,7 +112,11 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
             case 3:
                 return fileTags.getGenre();
         }
-        
+
         return null;
+    }
+
+    public void setTableRowEditedListener(TableRowEditedListener listener) {
+        this.tableRowEditedListener = listener;
     }
 }

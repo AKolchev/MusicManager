@@ -5,10 +5,12 @@
  */
 package views.interfaces;
 
+import events.MusicFileEditEventData;
+
 /**
  *
  * @author mgkon
  */
-public interface MusicFilesTableListener {
-    public void rowDeleted(int row);
+public interface TableRowEditedListener {
+    public void tableRowEdited(MusicFileEditEventData event);
 }

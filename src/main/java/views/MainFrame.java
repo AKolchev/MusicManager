@@ -5,6 +5,7 @@
 package views;
 
 import controllers.Controller;
+import events.MusicFileEditEventData;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -22,7 +23,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
-import views.interfaces.MusicFilesTableListener;
+import views.interfaces.TableRowDeletedListener;
+import views.interfaces.TableRowEditedListener;
 import views.interfaces.ToolbarEventListener;
 import views.utils.ImportSongsFileFilter;
 
@@ -42,7 +44,7 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         super("Music Manager");
         setLookAndFeel();
-        
+
         setLayout(new BorderLayout());
 
         setJMenuBar(createMenuBar());
@@ -53,16 +55,23 @@ public class MainFrame extends JFrame {
         controller = new Controller();
 
         tablePanel.setData(controller.getMusicFilesTags());
-        tablePanel.setPersonTableListener(new MusicFilesTableListener() {
+        tablePanel.setTableRowDeletedListener(new TableRowDeletedListener() {
             @Override
             public void rowDeleted(int row) {
                 controller.removeMusicFile(row);
             }
         });
 
+        tablePanel.setTableRowEditedListener(new TableRowEditedListener() {
+            @Override
+            public void tableRowEdited(MusicFileEditEventData event) {
+                controller.saveEditedFileTags(event);
+            }
+        });
+
         fileChooser.setFileFilter(new ImportSongsFileFilter());
         fileChooser.setMultiSelectionEnabled(true);
-        
+
         toolbar.setToolbarListener(new ToolbarEventListener() {
 
             @Override
@@ -148,6 +157,7 @@ public class MainFrame extends JFrame {
                 if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
                     //try {
                     controller.loadMusicFiles(fileChooser.getSelectedFiles());
+
                     tablePanel.refresh();
                     //} catch (IOException ex) {
                     //    JOptionPane.showMessageDialog(MainFrame.this, ex, "Exception while loading files", JOptionPane.ERROR_MESSAGE);

@@ -5,16 +5,17 @@
     <artifactId>MusicManager</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-        <dependencies>
+   <repositories>
+        <repository>
+            <id>jaudiotagger-repository</id>
+            <url>https://dl.bintray.com/ijabz/maven</url>
+        </repository>
+    </repositories>
+    <dependencies>
         <dependency>
-            <groupId>org.apache.tika</groupId>
-            <artifactId>tika-parsers</artifactId>
-            <version>1.24.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tika</groupId>
-            <artifactId>tika-core</artifactId>
-            <version>1.24.1</version>
+            <groupId>net.jthink</groupId>
+            <artifactId>jaudiotagger</artifactId>
+            <version>2.2.5</version>
         </dependency>
     </dependencies>
     <properties>
