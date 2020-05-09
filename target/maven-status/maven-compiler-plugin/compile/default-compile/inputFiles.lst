@@ -3,13 +3,9 @@ C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\Table
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\fileAccessLayer\FileOperations.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\models\MusicFileTag.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\controllers\Controller.java
-C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\customComponents\SearchableComboBox.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\interfaces\ToolbarEventListener.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\utils\ImportSongsFileFilter.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\interfaces\TableRowDeletedListener.java
-C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\models\MusicGenre.java
-C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\utils\GenreEditor.java
-C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\utils\GenreRenderer.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\main\App.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\interfaces\TableRowEditedListener.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\utils\Helper.java

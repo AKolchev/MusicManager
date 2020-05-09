@@ -52,7 +52,7 @@ public class Toolbar extends JToolBar implements ActionListener {
         JLabel iconLabel = new JLabel(createIcon("images/refresh-icon.png"));
         iconLabel.setCursor(Cursor.getDefaultCursor());
         searchField.add(iconLabel, BorderLayout.LINE_END);
-
+        
         JLabel searchLabel = new JLabel("Search by name, artist, genre..");
         searchLabel.setCursor(Cursor.getDefaultCursor());
         searchField.add(searchLabel, BorderLayout.LINE_START);

@@ -21,8 +21,7 @@ import models.MusicFileTag;
 import views.interfaces.TableRowDeletedListener;
 import views.interfaces.TableRowEditedListener;
 import views.tableModels.MusicFileTagsTableModel;
-import views.utils.GenreEditor;
-import views.utils.GenreRenderer;
+
 
 /**
  *
@@ -42,9 +41,6 @@ public class TablePanel extends JTable{
         this.popup = new JPopupMenu();
         
         table.setRowHeight(20);
-        
-        table.setDefaultRenderer(GenreRenderer.class, new GenreRenderer());
-        table.setDefaultEditor(GenreEditor.class, new GenreEditor());
         
         JMenuItem removeItem = new JMenuItem("Delete row");
         popup.add(removeItem);

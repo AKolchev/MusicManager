@@ -17,7 +17,7 @@ public class MusicFileTag implements Serializable {
     private static int count = 0;
     private String name;
     private String artist;
-    private List<MusicGenre> genres;
+    private String genre;
     private String fileLocation;
 
     public MusicFileTag() {
@@ -40,25 +40,12 @@ public class MusicFileTag implements Serializable {
         this.artist = artist;
     }
 
-    public void setGenre(List<MusicGenre> genres) {
-        this.genres = genres;
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
     public String getGenre() {
-        String genresCollection = null;
-        if (genres != null) {
-            StringBuilder genresBuilder = new StringBuilder();
-            for (MusicGenre genreItem : genres) {
-                if (genresBuilder.length() <= 0) {
-                    genresBuilder.append(genreItem.getGenreName());
-                } else {
-                    genresBuilder.append(", ");
-                    genresBuilder.append(genreItem.getGenreName());
-                }
-            }
-            genresCollection = genresBuilder.toString();
-        }
-        return genresCollection;
+        return this.genre;
     }
 
     public String getFileLocation() {
