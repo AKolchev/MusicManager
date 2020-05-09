@@ -6,7 +6,6 @@
 package models;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  *
@@ -48,11 +47,11 @@ public class MusicFileTag implements Serializable {
         return this.genre;
     }
 
-    public String getFileLocation() {
-        return fileLocation;
-    }
-
     public void setFileLocation(String fileLocation) {
         this.fileLocation = fileLocation;
+    }
+
+    public String getFileLocation() {
+        return fileLocation;
     }
 }

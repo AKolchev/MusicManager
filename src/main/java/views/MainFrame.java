@@ -57,8 +57,8 @@ public class MainFrame extends JFrame {
         tablePanel.setData(controller.getMusicFilesTags());
         tablePanel.setTableRowDeletedListener(new TableRowDeletedListener() {
             @Override
-            public void rowDeleted(int row) {
-                controller.removeMusicFile(row);
+            public void rowDeleted(int[] rows) {
+                controller.removeMusicFiles(rows);
             }
         });
 

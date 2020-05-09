@@ -10,5 +10,5 @@ package views.interfaces;
  * @author mgkon
  */
 public interface TableRowDeletedListener {
-    public void rowDeleted(int row);
+    public void rowDeleted(int[] rows);
 }

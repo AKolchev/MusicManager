@@ -6,7 +6,6 @@
 package views.tableModels;
 
 import events.MusicFileEditEventData;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -23,7 +22,7 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
     
     private TableRowEditedListener tableRowEditedListener;
     
-    private LinkedList<MusicFileTag> fo;
+    private List<MusicFileTag> fo;
     private String[] colNames = {"FileLocation", "Name", "Artist", "Genre"};
     
     public MusicFileTagsTableModel() {
@@ -45,7 +44,7 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
         if (fo != null) {
             MusicFileTag fileTags = fo.get(row);
             MusicFileEditEventData eventData = new MusicFileEditEventData(this);
-            eventData.fileTagData = new MusicFileTag();
+            //eventData.fileTagData = new MusicFileTag();
             eventData.fileTagData.setFileLocation(fileTags.getFileLocation());
             switch (col) {
                 case 2:
@@ -88,7 +87,7 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
         }
     }
     
-    public void setData(LinkedList<MusicFileTag> data) {
+    public void setData(List<MusicFileTag> data) {
         this.fo = data;
     }
     

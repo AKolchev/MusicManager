@@ -8,7 +8,12 @@ package fileAccessLayer;
 import events.MusicFileEditEventData;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.LogManager;
 import models.MusicFileTag;
 import org.jaudiotagger.audio.AudioFile;
@@ -32,7 +37,7 @@ import views.utils.Helper;
  */
 public class FileOperations {
 
-    private LinkedList<MusicFileTag> musicFilesTags;
+    private List<MusicFileTag> musicFilesTags;
 
     public FileOperations() {
         this.musicFilesTags = new LinkedList<>();
@@ -47,8 +52,8 @@ public class FileOperations {
      *
      * @return
      */
-    public LinkedList<MusicFileTag> getMusicFilesTags() {
-        return musicFilesTags;
+    public List<MusicFileTag> getMusicFilesTags() {
+        return Collections.unmodifiableList(musicFilesTags);
     }
 
     public void saveToFile(File file) throws IOException {
@@ -97,13 +102,22 @@ public class FileOperations {
                 }
 
                 fileTags.setFileLocation(file.getCanonicalPath());
+
                 musicFilesTags.add(fileTags);
             }
         }
     }
 
-    public void removeMusicFile(int row) {
-        musicFilesTags.remove(row);
+    public void removeMusicFiles(int[] rows) {
+        int rowCount = 0;
+        List rowsToBeDeleted = Helper.arrayToList(rows);
+        Iterator<MusicFileTag> collection = musicFilesTags.iterator();
+        while (collection.hasNext()) {
+            if (rowsToBeDeleted.contains(rowCount)) {
+                collection.remove();
+            }
+            rowCount++;
+        }
     }
 
     public void saveMusicTags(MusicFileEditEventData eventData) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException, CannotWriteException {

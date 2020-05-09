@@ -9,7 +9,7 @@ import events.MusicFileEditEventData;
 import fileAccessLayer.FileOperations;
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.MusicFileTag;
@@ -27,24 +27,26 @@ public class Controller {
 
     FileOperations fo = new FileOperations();
 
-    public LinkedList<MusicFileTag> getMusicFilesTags() {
+    public List<MusicFileTag> getMusicFilesTags() {
         return fo.getMusicFilesTags();
     }
 
     public void loadMusicFiles(File[] selectedFiles) {
+     
         try {
             fo.loadMusicFiles(selectedFiles);
         } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
 
     public void saveToFile(File selectedFile) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void removeMusicFile(int row) {
-        //db.removePerson(row);
+    public void removeMusicFiles(int[] rows) {
+        fo.removeMusicFiles(rows);
     }
 
     public void saveEditedFileTags(MusicFileEditEventData eventData) {

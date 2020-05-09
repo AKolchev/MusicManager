@@ -43,10 +43,7 @@ public class Toolbar extends JToolBar implements ActionListener {
         //refreshMusicFileTagsBtn.addActionListener(this);
         //add(refreshMusicFileTagsBtn);
         //addSeparator();
-        //searchFiled = new JTextField();
-        //searchFiled.setText("Search");
-        //searchFiled.setToolTipText("Search");
-        //add(searchFiled);
+
         searchField = new JTextField(25);
         searchField.setLayout(new BorderLayout());
         JLabel iconLabel = new JLabel(createIcon("images/refresh-icon.png"));
@@ -96,16 +93,7 @@ public class Toolbar extends JToolBar implements ActionListener {
         });
 
         add(searchField);
-        /*If it implements JPanel
-        setLayout(new FlowLayout(FlowLayout.RIGHT));
-        add(addTracksBtn);
-        add(clearTrackListBtn);
-
-        Border innerBorder = BorderFactory.createTitledBorder("Toolbar");
-        Border outerBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
-        setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
-         */
-    }
+ }
 
     private ImageIcon createIcon(String fileName) {
         //URL url = getClass().getResource(path);

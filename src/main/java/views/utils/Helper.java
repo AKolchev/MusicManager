@@ -5,6 +5,9 @@
  */
 package views.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author AKolchev, f55283 TODO - make singleton
@@ -25,18 +28,20 @@ public class Helper {
         return name.substring(pointIndex + 1, name.length());
     }
 
-    // public static void getMusicGenres(List<MusicGenre> musicGenres) {
-    //    MusicGenre musicGenre;
-    //    for (int i = 0; i <= 191; i++) {
-    //       musicGenre = new MusicGenre(i, GenreTypes.getInstanceOf().getValueForId(i));
-    //       musicGenres.add(musicGenre);
-    //  }
-    //}
     public static Integer tryParseInt(String inputString) {
         try {
             return Integer.parseInt(inputString);
         } catch (NumberFormatException ex) {
             return null;
         }
+    }
+    
+    public static List<Integer> arrayToList(int[] intArray){
+        List<Integer> newArray = new ArrayList<>();
+        for(int item:intArray){
+            newArray.add(item);
+        }
+        
+        return newArray;
     }
 }

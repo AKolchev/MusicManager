@@ -18,10 +18,12 @@ public class MusicFileEditEventData extends EventObject {
 
     public MusicFileEditEventData(Object source) {
         super(source);
+        fileTagData = new MusicFileTag();
     }
 
     public MusicFileEditEventData(Object source, MusicFileTag fileTagData) {
         super(source);
+        fileTagData = new MusicFileTag();
         this.fileTagData = fileTagData;
     }
 }
