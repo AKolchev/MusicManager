@@ -111,12 +111,14 @@ public class FileOperations {
 
     public void removeMusicFiles(int[] rows) {
         int rowCount = 0;
-        List rowsToBeDeleted = Helper.arrayToList(rows);
+        List<Integer> rowsToBeDeleted = Helper.arrayToList(rows);
         Iterator<MusicFileTag> collection = musicFilesTags.iterator();
         while (collection.hasNext()) {
+            collection.next();
             if (rowsToBeDeleted.contains(rowCount)) {
                 collection.remove();
             }
+            
             rowCount++;
         }
     }

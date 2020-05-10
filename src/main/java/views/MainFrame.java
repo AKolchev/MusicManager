@@ -56,7 +56,7 @@ public class MainFrame extends JFrame {
         controller = new Controller();
         fileChooser.setFileFilter(new ImportSongsFileFilter());
         fileChooser.setMultiSelectionEnabled(true);
-        
+
         tablePanel.setData(controller.getMusicFilesTags());
         tablePanel.setTableRowDeletedListener(new TableRowDeletedListener() {
             @Override
@@ -79,7 +79,7 @@ public class MainFrame extends JFrame {
                 tablePanel.refresh();
             }
         });
-        
+
         toolbar.setToolbarButtonsListener(new ToolbarButtonsEventListener() {
             @Override
             public void addMusicFilesEvent() {
@@ -141,7 +141,9 @@ public class MainFrame extends JFrame {
         menuBar.add(fileMenu);
 
         JMenu viewMenu = new JMenu("View");
-        JMenuItem fullScreenMenu = new JMenuItem("Full Screen");
+        JCheckBoxMenuItem fullScreenMenu = new JCheckBoxMenuItem("Full Screen");
+        fullScreenMenu.setSelected(false);
+
         JCheckBoxMenuItem showToolbarMenuItem = new JCheckBoxMenuItem("Show Toolbar");
         showToolbarMenuItem.setSelected(true);
 
@@ -155,6 +157,19 @@ public class MainFrame extends JFrame {
                 JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();
 
                 toolbar.setVisible(menuItem.isSelected());
+            }
+        });
+
+        fullScreenMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();
+
+                if (menuItem.isSelected()) {
+                    setExtendedState(JFrame.MAXIMIZED_BOTH);
+                } else {
+                    setSize(600, 500);
+                }
             }
         });
 
