@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -130,12 +131,15 @@ public class MainFrame extends JFrame {
 
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
-        JMenuItem importMenuItem = new JMenuItem("Import tracks...");
-        JMenuItem exportMenuItem = new JMenuItem("Export data");
+        JMenuItem importMusicFilesMenuItem = new JMenuItem("Import music files...");
+        JMenuItem exportProjectMenuItem = new JMenuItem("Export project..");
+        JMenuItem importProjectMenuItem = new JMenuItem("Import project..");
         JMenuItem exitMenuItem = new JMenuItem("Exit");
 
-        fileMenu.add(importMenuItem);
-        fileMenu.add(exportMenuItem);
+        fileMenu.add(importMusicFilesMenuItem);
+        fileMenu.addSeparator();
+        fileMenu.add(importProjectMenuItem);
+        fileMenu.add(exportProjectMenuItem);
         fileMenu.addSeparator();
         fileMenu.add(exitMenuItem);
         menuBar.add(fileMenu);
@@ -173,7 +177,7 @@ public class MainFrame extends JFrame {
             }
         });
 
-        importMenuItem.addActionListener(new ActionListener() {
+        importMusicFilesMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
@@ -188,19 +192,25 @@ public class MainFrame extends JFrame {
             }
         });
 
-        exportMenuItem.addActionListener(new ActionListener() {
+        exportProjectMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
-                    //try {
-                    controller.saveToFile(fileChooser.getSelectedFile());
-                    //} catch (IOException ex) {
-                    //    JOptionPane.showMessageDialog(MainFrame.this, ex, "Exception while exporting file", JOptionPane.ERROR_MESSAGE);
-                    //}
+                    controller.saveProjectToFile(fileChooser.getSelectedFile());
                 }
             }
         });
 
+        importProjectMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+                    controller.loadProjectFromFile(fileChooser.getSelectedFile());
+                    tablePanel.refresh();
+                }
+            }
+        });
+        
         exitMenuItem.addActionListener(new ActionListener() {
 
             @Override
@@ -218,8 +228,8 @@ public class MainFrame extends JFrame {
         });
 
         fileMenu.setMnemonic(KeyEvent.VK_F);
-        importMenuItem.setMnemonic(KeyEvent.VK_I);
-        exportMenuItem.setMnemonic(KeyEvent.VK_E);
+        importMusicFilesMenuItem.setMnemonic(KeyEvent.VK_I);
+        exportProjectMenuItem.setMnemonic(KeyEvent.VK_E);
         exitMenuItem.setMnemonic(KeyEvent.VK_X);
         exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
 

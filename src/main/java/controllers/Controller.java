@@ -32,17 +32,13 @@ public class Controller {
     }
 
     public void loadMusicFiles(File[] selectedFiles) {
-     
+
         try {
             fo.loadMusicFiles(selectedFiles);
         } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-    }
 
-    public void saveToFile(File selectedFile) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public void removeMusicFiles(int[] rows) {
@@ -56,8 +52,25 @@ public class Controller {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public void filterMusicFilesTable(String filter){
+
+    public void filterMusicFilesTable(String filter) {
         fo.filterMusicFiles(filter);
     }
-    
+
+    public void saveProjectToFile(File selectedFile) {
+        try {
+            fo.saveProjectToFile(selectedFile);
+        } catch (IOException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void loadProjectFromFile(File selectedFile) {
+        try {
+            fo.loadProjectFromFile(selectedFile);
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }

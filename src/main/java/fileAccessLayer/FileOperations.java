@@ -7,7 +7,12 @@ package fileAccessLayer;
 
 import events.MusicFileEditEventData;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -56,8 +61,25 @@ public class FileOperations {
         return Collections.unmodifiableList(musicFilesTags);
     }
 
-    public void saveToFile(File file) throws IOException {
+    public void saveProjectToFile(File file) throws IOException {
+        FileOutputStream fos = new FileOutputStream(file);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
 
+        MusicFileTag[] fileTags = musicFilesTags.toArray(new MusicFileTag[musicFilesTags.size()]);
+
+        oos.writeObject(fileTags);
+
+        oos.close();
+    }
+
+    public void loadProjectFromFile(File file) throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream(file);
+        var ois = new ObjectInputStream(fis);
+
+        MusicFileTag[] fileTags = (MusicFileTag[]) ois.readObject();
+        musicFilesTags.clear();
+        musicFilesTags.addAll(Arrays.asList(fileTags));
+        ois.close();
     }
 
     public void loadMusicFiles(File[] files) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
@@ -118,7 +140,7 @@ public class FileOperations {
             if (rowsToBeDeleted.contains(rowCount)) {
                 collection.remove();
             }
-            
+
             rowCount++;
         }
     }
