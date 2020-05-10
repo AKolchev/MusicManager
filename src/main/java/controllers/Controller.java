@@ -73,4 +73,16 @@ public class Controller {
         }
     }
 
+    public void reloadMusicFiles() {
+        try {
+            fo.reloadMusicFiles();
+        } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void saveMusicFiles() {
+        fo.saveMusicFiles();
+    }
+
 }

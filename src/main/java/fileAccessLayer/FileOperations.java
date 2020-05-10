@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -32,8 +33,8 @@ import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.flac.FlacTag;
 import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
-import views.utils.Helper;
-import views.utils.SortTableRows;
+import utils.Helper;
+import utils.SortTableRows;
 
 /**
  *
@@ -80,6 +81,24 @@ public class FileOperations {
         musicFilesTags.clear();
         musicFilesTags.addAll(Arrays.asList(fileTags));
         ois.close();
+    }
+
+    public void saveMusicFiles() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void reloadMusicFiles() throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
+        ArrayList<File> musicFiles = new ArrayList<>();
+        
+        musicFilesTags.forEach((musicFile) -> {
+            musicFiles.add(new File(musicFile.getFileLocation()));
+        });
+        
+        musicFilesTags.clear();
+        File[] files = new File[musicFiles.size()];
+        musicFiles.toArray(files);
+        
+        loadMusicFiles(files);
     }
 
     public void loadMusicFiles(File[] files) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {

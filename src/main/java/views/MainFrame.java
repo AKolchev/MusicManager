@@ -15,7 +15,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.io.IOException;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -28,9 +27,9 @@ import javax.swing.UIManager;
 import views.interfaces.TableFilteredListener;
 import views.interfaces.TableRowDeletedListener;
 import views.interfaces.TableRowEditedListener;
-import views.utils.ImportSongsFileFilter;
+import utils.ImportSongsFileFilter;
 import views.interfaces.ToolbarButtonsEventListener;
-import views.utils.ProjectFileFilter;
+import utils.ProjectFileFilter;
 
 /**
  * @author AKolchev, f55283
@@ -82,15 +81,16 @@ public class MainFrame extends JFrame {
         });
 
         toolbar.setToolbarButtonsListener(new ToolbarButtonsEventListener() {
+           
             @Override
-            public void addMusicFilesEvent() {
-
-                //controller.addPerson(newDummyEvent);
+            public void reloadMusicFilesEvent() {
+                controller.reloadMusicFiles();
+                tablePanel.refresh();
             }
 
             @Override
-            public void refreshMusicFilesEvent() {
-                tablePanel.refresh();
+            public void saveMusicFilesEvent() {
+                controller.saveMusicFiles();
             }
         });
 

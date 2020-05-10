@@ -10,6 +10,6 @@ package views.interfaces;
  * @author mgkon
  */
 public interface ToolbarButtonsEventListener {
-   public void addMusicFilesEvent();
-   public void refreshMusicFilesEvent();
+   public void saveMusicFilesEvent();
+   public void reloadMusicFilesEvent();
 }

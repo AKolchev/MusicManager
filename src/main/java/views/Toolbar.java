@@ -7,7 +7,7 @@ package views;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
-import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -17,6 +17,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -31,7 +32,8 @@ import views.interfaces.ToolbarButtonsEventListener;
  */
 public class Toolbar extends JToolBar implements ActionListener {
 
-    //private JButton refreshMusicFileTagsBtn;
+    private JButton reloadMusicFileTagsBtn;
+    private JButton saveMusicTagsBtn;
     private JTextField searchField;
 
     private ToolbarButtonsEventListener buttonsEventListener;
@@ -39,14 +41,25 @@ public class Toolbar extends JToolBar implements ActionListener {
 
     public Toolbar() {
 
-        //refreshMusicFileTagsBtn = new JButton();
-        //refreshMusicFileTagsBtn.setIcon(createIcon("images/refresh-icon.png"));
-        //refreshMusicFileTagsBtn.setToolTipText("Refresh music file tags");
-        //refreshMusicFileTagsBtn.addActionListener(this);
-        //add(refreshMusicFileTagsBtn);
-        //addSeparator();
+        reloadMusicFileTagsBtn = new JButton();
+        reloadMusicFileTagsBtn.setLayout(new FlowLayout());
+        reloadMusicFileTagsBtn.setIcon(createIcon("images/refresh-icon.png"));
+        reloadMusicFileTagsBtn.setToolTipText("Refresh music filess");
+        reloadMusicFileTagsBtn.addActionListener(this);
+        add(reloadMusicFileTagsBtn);
+
+        saveMusicTagsBtn = new JButton();
+        saveMusicTagsBtn.setLayout(new FlowLayout());
+        saveMusicTagsBtn.setIcon(createIcon("images/refresh-icon.png"));
+        saveMusicTagsBtn.setToolTipText("Save music tagss");
+        saveMusicTagsBtn.addActionListener(this);
+        add(saveMusicTagsBtn);
+
+        add(Box.createHorizontalGlue());
+
         searchField = new JTextField(25);
         searchField.setLayout(new BorderLayout());
+
         JLabel iconLabel = new JLabel(createIcon("images/refresh-icon.png"));
         iconLabel.setCursor(Cursor.getDefaultCursor());
         searchField.add(iconLabel, BorderLayout.LINE_END);
@@ -54,6 +67,7 @@ public class Toolbar extends JToolBar implements ActionListener {
         JLabel searchLabel = new JLabel("Search by name, artist, genre..");
         searchLabel.setCursor(Cursor.getDefaultCursor());
         searchField.add(searchLabel, BorderLayout.LINE_START);
+        add(searchField);
 
         iconLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -88,7 +102,6 @@ public class Toolbar extends JToolBar implements ActionListener {
             }
         });
 
-        add(searchField);
     }
 
     private ImageIcon createIcon(String fileName) {
@@ -110,6 +123,12 @@ public class Toolbar extends JToolBar implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        //    eventListener.refreshMusicFilesEvent();
+        JButton btnSource = (JButton) e.getSource();
+        if (btnSource == reloadMusicFileTagsBtn) {
+            buttonsEventListener.reloadMusicFilesEvent();
+        }
+        else if(btnSource == saveMusicTagsBtn){
+            buttonsEventListener.saveMusicFilesEvent();
+        }
     }
 }

@@ -6,15 +6,13 @@
 package views.tableModels;
 
 import events.MusicFileEditEventData;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.table.AbstractTableModel;
 import models.MusicFileTag;
 import org.jaudiotagger.tag.reference.GenreTypes;
 import views.interfaces.TableRowEditedListener;
-import views.utils.Helper;
-import views.utils.SortTableRows;
+import utils.Helper;
 
 /**
  *
@@ -96,7 +94,6 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
     @Override
     public int getRowCount() {
         return fo.stream().filter(x -> x.getIsVisible() == true).collect(Collectors.toList()).size();
-        //return fo.size();
     }
 
     @Override
