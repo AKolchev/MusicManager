@@ -10,9 +10,9 @@ import javax.swing.filechooser.FileFilter;
 
 /**
  *
- * @author AKolchev, f55283
+ * @author mgkon
  */
-public class ImportSongsFileFilter extends FileFilter {
+public class ProjectFileFilter extends FileFilter {
 
     @Override
     public boolean accept(File file) {
@@ -20,11 +20,11 @@ public class ImportSongsFileFilter extends FileFilter {
         String fileName = file.getName();
         String fileExt = Helper.getFileExtension(fileName);
         
-        return (file.isDirectory() || (fileExt != null && ( fileExt.toLowerCase().equals("mp3") || fileExt.toLowerCase().equals("flac")))) == true;
+        return (file.isDirectory() || (fileExt != null && fileExt.toLowerCase().equals("mmproj"))) == true;
     }
 
     @Override
     public String getDescription() {
-        return "Music files allowed (*.mp3, *.flac)";
+        return "Music manager project files (*.mmproj)";
     }
 }

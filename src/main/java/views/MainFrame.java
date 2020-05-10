@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.io.IOException;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
@@ -29,6 +30,7 @@ import views.interfaces.TableRowDeletedListener;
 import views.interfaces.TableRowEditedListener;
 import views.utils.ImportSongsFileFilter;
 import views.interfaces.ToolbarButtonsEventListener;
+import views.utils.ProjectFileFilter;
 
 /**
  * @author AKolchev, f55283
@@ -55,8 +57,6 @@ public class MainFrame extends JFrame {
         tablePanel = new TablePanel();
         fileChooser = new JFileChooser();
         controller = new Controller();
-        fileChooser.setFileFilter(new ImportSongsFileFilter());
-        fileChooser.setMultiSelectionEnabled(true);
 
         tablePanel.setData(controller.getMusicFilesTags());
         tablePanel.setTableRowDeletedListener(new TableRowDeletedListener() {
@@ -180,8 +180,11 @@ public class MainFrame extends JFrame {
         importMusicFilesMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                fileChooser.setFileFilter(new ImportSongsFileFilter());
+                fileChooser.setMultiSelectionEnabled(true);
                 if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
                     //try {
+                    fileChooser.setSelectedFile(new File(""));
                     controller.loadMusicFiles(fileChooser.getSelectedFiles());
 
                     tablePanel.refresh();
@@ -195,6 +198,9 @@ public class MainFrame extends JFrame {
         exportProjectMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                fileChooser.setFileFilter(new ProjectFileFilter());
+                fileChooser.setSelectedFile(new File("My music manager project.mmproj"));
+                fileChooser.setMultiSelectionEnabled(false);
                 if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
                     controller.saveProjectToFile(fileChooser.getSelectedFile());
                 }
@@ -204,13 +210,15 @@ public class MainFrame extends JFrame {
         importProjectMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                fileChooser.setFileFilter(new ProjectFileFilter());
+                fileChooser.setMultiSelectionEnabled(false);
                 if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
                     controller.loadProjectFromFile(fileChooser.getSelectedFile());
                     tablePanel.refresh();
                 }
             }
         });
-        
+
         exitMenuItem.addActionListener(new ActionListener() {
 
             @Override
