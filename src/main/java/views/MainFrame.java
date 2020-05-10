@@ -23,10 +23,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
+import views.interfaces.TableFilteredListener;
 import views.interfaces.TableRowDeletedListener;
 import views.interfaces.TableRowEditedListener;
-import views.interfaces.ToolbarEventListener;
 import views.utils.ImportSongsFileFilter;
+import views.interfaces.ToolbarButtonsEventListener;
 
 /**
  * @author AKolchev, f55283
@@ -53,7 +54,9 @@ public class MainFrame extends JFrame {
         tablePanel = new TablePanel();
         fileChooser = new JFileChooser();
         controller = new Controller();
-
+        fileChooser.setFileFilter(new ImportSongsFileFilter());
+        fileChooser.setMultiSelectionEnabled(true);
+        
         tablePanel.setData(controller.getMusicFilesTags());
         tablePanel.setTableRowDeletedListener(new TableRowDeletedListener() {
             @Override
@@ -69,11 +72,15 @@ public class MainFrame extends JFrame {
             }
         });
 
-        fileChooser.setFileFilter(new ImportSongsFileFilter());
-        fileChooser.setMultiSelectionEnabled(true);
-
-        toolbar.setToolbarListener(new ToolbarEventListener() {
-
+        toolbar.setTableFilterListener(new TableFilteredListener() {
+            @Override
+            public void tableFiltered(String filter) {
+                controller.filterMusicFilesTable(filter);
+                tablePanel.refresh();
+            }
+        });
+        
+        toolbar.setToolbarButtonsListener(new ToolbarButtonsEventListener() {
             @Override
             public void addMusicFilesEvent() {
 

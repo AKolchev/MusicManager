@@ -18,6 +18,7 @@ public class MusicFileTag implements Serializable {
     private String artist;
     private String genre;
     private String fileLocation;
+    private Boolean isVisible;
 
     public MusicFileTag() {
         MusicFileTag.count++;
@@ -53,5 +54,13 @@ public class MusicFileTag implements Serializable {
 
     public String getFileLocation() {
         return fileLocation;
+    }
+
+    public void setIsVisible(boolean isVisible) {
+        this.isVisible = isVisible;
+    }
+
+    public boolean getIsVisible() {
+        return isVisible;
     }
 }

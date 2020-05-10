@@ -6,39 +6,41 @@
 package views.tableModels;
 
 import events.MusicFileEditEventData;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.table.AbstractTableModel;
 import models.MusicFileTag;
 import org.jaudiotagger.tag.reference.GenreTypes;
 import views.interfaces.TableRowEditedListener;
 import views.utils.Helper;
+import views.utils.SortTableRows;
 
 /**
  *
  * @author mgkon
  */
 public class MusicFileTagsTableModel extends AbstractTableModel {
-    
+
     private TableRowEditedListener tableRowEditedListener;
-    
+
     private List<MusicFileTag> fo;
     private String[] colNames = {"FileLocation", "Name", "Artist", "Genre"};
-    
+
     public MusicFileTagsTableModel() {
-        
+
     }
-    
+
     @Override
     public String getColumnName(int column) {
         return colNames[column];
     }
-    
+
     @Override
     public boolean isCellEditable(int row, int col) {
         return col > 1;
     }
-    
+
     @Override
     public void setValueAt(Object value, int row, int col) {
         if (fo != null) {
@@ -52,11 +54,11 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
                     eventData.fileTagData.setArtist((String) value);
                     break;
                 case 3:
-                    
+
                     String genreValue = (String) value;
-                    
+
                     StringBuilder genre = new StringBuilder();
-                    
+
                     String[] genreValues = genreValue.split(",");
                     for (String genreItem : genreValues) {
                         genreItem = genreItem.trim();
@@ -78,7 +80,7 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
                     }
                     fileTags.setGenre(genre.toString());
                     eventData.fileTagData.setGenre(genre.toString());
-                    
+
                     break;
                 default:
                     break;
@@ -86,21 +88,22 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
             tableRowEditedListener.tableRowEdited(eventData);
         }
     }
-    
+
     public void setData(List<MusicFileTag> data) {
         this.fo = data;
     }
-    
+
     @Override
     public int getRowCount() {
-        return fo.size();
+        return fo.stream().filter(x -> x.getIsVisible() == true).collect(Collectors.toList()).size();
+        //return fo.size();
     }
-    
+
     @Override
     public int getColumnCount() {
         return 4;
     }
-    
+
     @Override
     public Class<?> getColumnClass(int col) {
         switch (col) {
@@ -116,26 +119,26 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
                 return null;
         }
     }
-    
+
     @Override
     public Object getValueAt(int row, int column) {
-        
+
         MusicFileTag fileTags = fo.get(row);
-        
-        switch (column) {
-            case 0:
-                return fileTags.getFileLocation();
-            case 1:
-                return fileTags.getName();
-            case 2:
-                return fileTags.getArtist();
-            case 3:
-                return fileTags.getGenre();
+        if (fileTags.getIsVisible() == true) {
+            switch (column) {
+                case 0:
+                    return fileTags.getFileLocation();
+                case 1:
+                    return fileTags.getName();
+                case 2:
+                    return fileTags.getArtist();
+                case 3:
+                    return fileTags.getGenre();
+            }
         }
-        
         return null;
     }
-    
+
     public void setTableRowEditedListener(TableRowEditedListener listener) {
         this.tableRowEditedListener = listener;
     }

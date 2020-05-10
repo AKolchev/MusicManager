@@ -8,8 +8,6 @@ package fileAccessLayer;
 import events.MusicFileEditEventData;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -30,6 +28,7 @@ import org.jaudiotagger.tag.flac.FlacTag;
 import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import views.utils.Helper;
+import views.utils.SortTableRows;
 
 /**
  *
@@ -53,6 +52,7 @@ public class FileOperations {
      * @return
      */
     public List<MusicFileTag> getMusicFilesTags() {
+
         return Collections.unmodifiableList(musicFilesTags);
     }
 
@@ -102,10 +102,11 @@ public class FileOperations {
                 }
 
                 fileTags.setFileLocation(file.getCanonicalPath());
-
+                fileTags.setIsVisible(true);
                 musicFilesTags.add(fileTags);
             }
         }
+        Collections.sort(this.musicFilesTags, new SortTableRows());
     }
 
     public void removeMusicFiles(int[] rows) {
@@ -171,5 +172,20 @@ public class FileOperations {
         tag.addField(tag.createField(FieldKey.ARTIST, Value));
 
         file.commit();
+    }
+
+    public void filterMusicFiles(String filterKeyWord) {
+        String filter = filterKeyWord.toLowerCase();
+
+        if ("".equals(filter)) {
+            musicFilesTags.forEach(x -> x.setIsVisible(true));
+        } else {
+            musicFilesTags.forEach(x -> x.setIsVisible(false));
+            musicFilesTags.stream().filter(x -> x.getName().toLowerCase().contains(filter)
+                    || x.getArtist().toLowerCase().contains(filter)
+                    || x.getGenre().toLowerCase().contains(filter)
+            ).forEach(x -> x.setIsVisible(true));
+        }
+        Collections.sort(musicFilesTags, new SortTableRows());
     }
 }

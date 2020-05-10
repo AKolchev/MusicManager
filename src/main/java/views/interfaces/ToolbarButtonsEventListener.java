@@ -9,7 +9,7 @@ package views.interfaces;
  *
  * @author mgkon
  */
-public interface ToolbarEventListener {
+public interface ToolbarButtonsEventListener {
    public void addMusicFilesEvent();
    public void refreshMusicFilesEvent();
 }

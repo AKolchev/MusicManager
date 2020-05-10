@@ -22,7 +22,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
-import views.interfaces.ToolbarEventListener;
+import views.interfaces.TableFilteredListener;
+import views.interfaces.ToolbarButtonsEventListener;
 
 /**
  *
@@ -33,7 +34,8 @@ public class Toolbar extends JToolBar implements ActionListener {
     //private JButton refreshMusicFileTagsBtn;
     private JTextField searchField;
 
-    private ToolbarEventListener eventListener;
+    private ToolbarButtonsEventListener buttonsEventListener;
+    private TableFilteredListener tableFilteredListener;
 
     public Toolbar() {
 
@@ -43,13 +45,12 @@ public class Toolbar extends JToolBar implements ActionListener {
         //refreshMusicFileTagsBtn.addActionListener(this);
         //add(refreshMusicFileTagsBtn);
         //addSeparator();
-
         searchField = new JTextField(25);
         searchField.setLayout(new BorderLayout());
         JLabel iconLabel = new JLabel(createIcon("images/refresh-icon.png"));
         iconLabel.setCursor(Cursor.getDefaultCursor());
         searchField.add(iconLabel, BorderLayout.LINE_END);
-        
+
         JLabel searchLabel = new JLabel("Search by name, artist, genre..");
         searchLabel.setCursor(Cursor.getDefaultCursor());
         searchField.add(searchLabel, BorderLayout.LINE_START);
@@ -73,19 +74,14 @@ public class Toolbar extends JToolBar implements ActionListener {
         searchField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (searchField.hasFocus()) {
-                    if (searchField.getText().length() >= 0) {
-                        searchLabel.setText("");
-                    }
-                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                        e.consume();
-                        searchField.setText("");
-                    }
+                if (searchField.hasFocus() && searchField.getText().length() >= 0) {
+                    searchLabel.setText("");
                 }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
+                tableFilteredListener.tableFiltered(searchField.getText());
                 if (searchField.hasFocus() && searchField.getText().length() == 0) {
                     searchLabel.setText("Search by name, artist, genre..");
                 }
@@ -93,10 +89,9 @@ public class Toolbar extends JToolBar implements ActionListener {
         });
 
         add(searchField);
- }
+    }
 
     private ImageIcon createIcon(String fileName) {
-        //URL url = getClass().getResource(path);
         URL url = getClass().getClassLoader().getResource(fileName);
         if (url == null) {
             System.err.println("Unable to load image: " + url);
@@ -105,8 +100,12 @@ public class Toolbar extends JToolBar implements ActionListener {
         return icon;
     }
 
-    public void setToolbarListener(ToolbarEventListener listener) {
-        this.eventListener = listener;
+    public void setToolbarButtonsListener(ToolbarButtonsEventListener listener) {
+        this.buttonsEventListener = listener;
+    }
+
+    public void setTableFilterListener(TableFilteredListener listener) {
+        this.tableFilteredListener = listener;
     }
 
     @Override

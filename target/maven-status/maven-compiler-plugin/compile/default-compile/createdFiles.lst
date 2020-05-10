@@ -1,11 +1,13 @@
+views\interfaces\ToolbarButtonsEventListener.class
 fileAccessLayer\FileOperations.class
 views\TablePanel$1.class
 views\MainFrame$7.class
-views\interfaces\ToolbarEventListener.class
 views\MainFrame$3.class
 views\Toolbar$1.class
 views\tableModels\MusicFileTagsTableModel.class
 views\Toolbar$3.class
+views\MainFrame$9.class
+views\interfaces\TableFilteredListener.class
 views\interfaces\TableRowDeletedListener.class
 views\interfaces\TableRowEditedListener.class
 events\MusicFileEditEventData.class

@@ -56,4 +56,8 @@ public class Controller {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    public void filterMusicFilesTable(String filter){
+        fo.filterMusicFiles(filter);
+    }
+    
 }

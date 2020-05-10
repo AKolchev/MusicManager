@@ -2,8 +2,9 @@ C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\events\Musi
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\TablePanel.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\fileAccessLayer\FileOperations.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\models\MusicFileTag.java
+C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\interfaces\TableFilteredListener.java
+C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\interfaces\ToolbarButtonsEventListener.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\controllers\Controller.java
-C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\interfaces\ToolbarEventListener.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\utils\ImportSongsFileFilter.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\interfaces\TableRowDeletedListener.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\main\App.java
