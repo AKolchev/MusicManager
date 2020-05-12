@@ -5,14 +5,13 @@
  */
 package controllers;
 
-import events.MusicFileEditEventData;
-import fileAccessLayer.FileOperations;
+import fileOperationsLayer.FileOperations;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import models.MusicFileTag;
+import models.MusicFileTags;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
@@ -27,7 +26,7 @@ public class Controller {
 
     FileOperations fo = new FileOperations();
 
-    public List<MusicFileTag> getMusicFilesTags() {
+    public List<MusicFileTags> getMusicFilesTags() {
         return fo.getMusicFilesTags();
     }
 
@@ -43,14 +42,6 @@ public class Controller {
 
     public void removeMusicFiles(int[] rows) {
         fo.removeMusicFiles(rows);
-    }
-
-    public void saveEditedFileTags(MusicFileEditEventData eventData) {
-        try {
-            fo.saveMusicTags(eventData);
-        } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException | CannotWriteException ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     public void filterMusicFilesTable(String filter) {
@@ -82,7 +73,11 @@ public class Controller {
     }
 
     public void saveMusicFiles() {
-        fo.saveMusicFiles();
+        try {
+            fo.saveMusicFiles();
+        } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException | CannotWriteException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

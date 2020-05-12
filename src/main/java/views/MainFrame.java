@@ -5,7 +5,6 @@
 package views;
 
 import controllers.Controller;
-import events.MusicFileEditEventData;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -24,11 +23,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
-import views.interfaces.TableFilteredListener;
-import views.interfaces.TableRowDeletedListener;
-import views.interfaces.TableRowEditedListener;
+import eventListeners.TableFilteredListener;
+import eventListeners.TableRowDeletedListener;
 import utils.ImportSongsFileFilter;
-import views.interfaces.ToolbarButtonsEventListener;
+import eventListeners.ToolbarButtonsEventListener;
 import utils.ProjectFileFilter;
 
 /**
@@ -62,13 +60,6 @@ public class MainFrame extends JFrame {
             @Override
             public void rowDeleted(int[] rows) {
                 controller.removeMusicFiles(rows);
-            }
-        });
-
-        tablePanel.setTableRowEditedListener(new TableRowEditedListener() {
-            @Override
-            public void tableRowEdited(MusicFileEditEventData event) {
-                controller.saveEditedFileTags(event);
             }
         });
 

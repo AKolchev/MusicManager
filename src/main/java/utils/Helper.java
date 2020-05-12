@@ -16,7 +16,7 @@ public class Helper {
 
     public static String getFileExtension(String name) {
         int pointIndex = name.lastIndexOf(".");
-
+        
         if (pointIndex == -1) {
             return null;
         }
@@ -35,13 +35,13 @@ public class Helper {
             return null;
         }
     }
-    
-    public static List<Integer> arrayToList(int[] intArray){
+
+    public static List<Integer> arrayToList(int[] intArray) {
         List<Integer> newArray = new ArrayList<>();
-        for(int item:intArray){
+        for (int item : intArray) {
             newArray.add(item);
         }
-        
+
         return newArray;
     }
 }

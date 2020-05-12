@@ -6,16 +6,16 @@
 package utils;
 
 import java.util.Comparator;
-import models.MusicFileTag;
+import models.MusicFileTags;
 
 /**
  *
  * @author mgkon
  */
-public class SortTableRows implements Comparator<MusicFileTag> {
+public class SortTableRows implements Comparator<MusicFileTags> {
 
     @Override
-    public int compare(MusicFileTag t1, MusicFileTag t2) {
+    public int compare(MusicFileTags t1, MusicFileTags t2) {
         
         if (t1.getIsVisible() && !t2.getIsVisible()) {
             return -1;
@@ -24,7 +24,7 @@ public class SortTableRows implements Comparator<MusicFileTag> {
             return 1;
         }
 
-        return t2.getArtist().compareTo(t1.getArtist());
+        return t2.getAlbumArtist().compareTo(t1.getAlbumArtist());
     }
 
 }

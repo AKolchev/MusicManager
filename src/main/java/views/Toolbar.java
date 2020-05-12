@@ -23,8 +23,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
-import views.interfaces.TableFilteredListener;
-import views.interfaces.ToolbarButtonsEventListener;
+import eventListeners.TableFilteredListener;
+import eventListeners.ToolbarButtonsEventListener;
 
 /**
  *

@@ -5,7 +5,6 @@
  */
 package views;
 
-import events.MusicFileEditEventData;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,9 +15,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import models.MusicFileTag;
-import views.interfaces.TableRowDeletedListener;
-import views.interfaces.TableRowEditedListener;
+import models.MusicFileTags;
+import eventListeners.TableRowDeletedListener;
 import views.tableModels.MusicFileTagsTableModel;
 
 /**
@@ -31,7 +29,6 @@ public class TablePanel extends JTable {
     private MusicFileTagsTableModel tableModel;
     private JPopupMenu popup;
     private TableRowDeletedListener tableRowDeletedListener;
-    private TableRowEditedListener tableRowEditedListener;
 
     public TablePanel() {
         this.tableModel = new MusicFileTagsTableModel();
@@ -73,22 +70,11 @@ public class TablePanel extends JTable {
         tableModel.fireTableDataChanged();
     }
 
-    public void setData(List<MusicFileTag> fo) {
+    public void setData(List<MusicFileTags> fo) {
         tableModel.setData(fo);
     }
 
     public void setTableRowDeletedListener(TableRowDeletedListener listener) {
         this.tableRowDeletedListener = listener;
-    }
-
-    void setTableRowEditedListener(TableRowEditedListener listener) {
-        this.tableRowEditedListener = listener;
-
-        tableModel.setTableRowEditedListener(new TableRowEditedListener() {
-            @Override
-            public void tableRowEdited(MusicFileEditEventData event) {
-                tableRowEditedListener.tableRowEdited(event);
-            }
-        });
     }
 }

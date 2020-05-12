@@ -5,13 +5,11 @@
  */
 package views.tableModels;
 
-import events.MusicFileEditEventData;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.table.AbstractTableModel;
-import models.MusicFileTag;
+import models.MusicFileTags;
 import org.jaudiotagger.tag.reference.GenreTypes;
-import views.interfaces.TableRowEditedListener;
 import utils.Helper;
 
 /**
@@ -20,10 +18,8 @@ import utils.Helper;
  */
 public class MusicFileTagsTableModel extends AbstractTableModel {
 
-    private TableRowEditedListener tableRowEditedListener;
-
-    private List<MusicFileTag> fo;
-    private String[] colNames = {"FileLocation", "Name", "Artist", "Genre"};
+    private List<MusicFileTags> fo;
+    private String[] colNames = {"File name", "Title", "Artist", "Album", "Album Artist", "Year", "Genre", "Comment"};
 
     public MusicFileTagsTableModel() {
 
@@ -36,22 +32,18 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int row, int col) {
-        return col > 1;
+        return col > 0;
     }
 
     @Override
     public void setValueAt(Object value, int row, int col) {
         if (fo != null) {
-            MusicFileTag fileTags = fo.get(row);
-            MusicFileEditEventData eventData = new MusicFileEditEventData(this);
-            //eventData.fileTagData = new MusicFileTag();
-            eventData.fileTagData.setFileLocation(fileTags.getFileLocation());
+            MusicFileTags fileTags = fo.get(row);
             switch (col) {
                 case 2:
-                    fileTags.setArtist((String) value);
-                    eventData.fileTagData.setArtist((String) value);
+                    fileTags.setArtist((String)value);
                     break;
-                case 3:
+                case 6:
 
                     String genreValue = (String) value;
 
@@ -77,17 +69,15 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
                         genre.append(genreName);
                     }
                     fileTags.setGenre(genre.toString());
-                    eventData.fileTagData.setGenre(genre.toString());
 
                     break;
                 default:
                     break;
             }
-            tableRowEditedListener.tableRowEdited(eventData);
         }
     }
 
-    public void setData(List<MusicFileTag> data) {
+    public void setData(List<MusicFileTags> data) {
         this.fo = data;
     }
 
@@ -98,7 +88,7 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 4;
+        return colNames.length;
     }
 
     @Override
@@ -112,6 +102,14 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
                 return String.class;
             case 3:
                 return String.class;
+            case 4:
+                return String.class;
+            case 5:
+                return Integer.class;
+            case 6:
+                return String.class;
+            case 7:
+                return String.class;
             default:
                 return null;
         }
@@ -120,23 +118,28 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int row, int column) {
 
-        MusicFileTag fileTags = fo.get(row);
+        MusicFileTags fileTags = fo.get(row);
         if (fileTags.getIsVisible() == true) {
             switch (column) {
                 case 0:
-                    return fileTags.getFileLocation();
+                    return fileTags.getFileName();
                 case 1:
-                    return fileTags.getName();
+                    return fileTags.getTitle();
                 case 2:
                     return fileTags.getArtist();
                 case 3:
+                    return fileTags.getAlbum();
+                case 4:
+                    return fileTags.getAlbumArtist();
+                case 5:
+                    return fileTags.getYear();
+                case 6:
                     return fileTags.getGenre();
+                case 7:
+                    return fileTags.getComment();
             }
         }
-        return null;
-    }
 
-    public void setTableRowEditedListener(TableRowEditedListener listener) {
-        this.tableRowEditedListener = listener;
+        return null;
     }
 }

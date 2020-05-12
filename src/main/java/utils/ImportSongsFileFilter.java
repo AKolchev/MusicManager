@@ -18,9 +18,9 @@ public class ImportSongsFileFilter extends FileFilter {
     public boolean accept(File file) {
     
         String fileName = file.getName();
-        String fileExt = Helper.getFileExtension(fileName);
+        String fileType = Helper.getFileExtension(fileName);
         
-        return (file.isDirectory() || (fileExt != null && ( fileExt.toLowerCase().equals("mp3") || fileExt.toLowerCase().equals("flac")))) == true;
+        return (file.isDirectory() || (("mp3").equalsIgnoreCase(fileType) || ("flac").equalsIgnoreCase(fileType))) == true;
     }
 
     @Override
