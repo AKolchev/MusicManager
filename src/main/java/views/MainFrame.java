@@ -97,7 +97,7 @@ public class MainFrame extends JFrame {
         add(toolbar, BorderLayout.PAGE_START);
 
         setMinimumSize(new Dimension(500, 400));
-        setSize(600, 500);
+        setSize(700, 600);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setVisible(true);
     }

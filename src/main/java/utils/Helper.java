@@ -7,6 +7,7 @@ package utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.jaudiotagger.tag.reference.GenreTypes;
 
 /**
  *
@@ -16,7 +17,7 @@ public class Helper {
 
     public static String getFileExtension(String name) {
         int pointIndex = name.lastIndexOf(".");
-        
+
         if (pointIndex == -1) {
             return null;
         }
@@ -43,5 +44,31 @@ public class Helper {
         }
 
         return newArray;
+    }
+
+    public static String getNormalizedGenreValue(String genreValue) {
+        StringBuilder genre = new StringBuilder();
+
+        String[] genreValues = genreValue.split(",");
+        for (String genreItem : genreValues) {
+            genreItem = genreItem.trim();
+            Integer genreId = Helper.tryParseInt(genreItem);
+            String genreName;
+            if (genreId != null) {
+                genreName = GenreTypes.getInstanceOf().getValueForId(genreId);
+            } else {
+                genreName = genreItem;
+                genreId = GenreTypes.getInstanceOf().getIdForValue(genreItem);
+                if (genreId == null && !"".equals(genreName)) {
+                    genreName = "Other";
+                }
+            }
+            if (genre.length() > 0) {
+                genre.append(", ");
+            }
+            genre.append(genreName);
+        }
+
+        return genre.toString();
     }
 }

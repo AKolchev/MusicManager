@@ -40,36 +40,28 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
         if (fo != null) {
             MusicFileTags fileTags = fo.get(row);
             switch (col) {
+                case 1:
+                    fileTags.setTitle((String) value);
+                    break;
                 case 2:
-                    fileTags.setArtist((String)value);
+                    fileTags.setArtist((String) value);
+                    break;
+                case 3:
+                    fileTags.setAlbum((String) value);
+                    break;
+                case 4:
+                    fileTags.setAlbumArtist((String) value);
+                    break;
+                case 5:
+                    fileTags.setYear((Integer) value);
                     break;
                 case 6:
-
                     String genreValue = (String) value;
-
-                    StringBuilder genre = new StringBuilder();
-
-                    String[] genreValues = genreValue.split(",");
-                    for (String genreItem : genreValues) {
-                        genreItem = genreItem.trim();
-                        Integer genreId = Helper.tryParseInt(genreItem);
-                        String genreName;
-                        if (genreId != null) {
-                            genreName = GenreTypes.getInstanceOf().getValueForId(genreId);
-                        } else {
-                            genreName = genreItem;
-                            genreId = GenreTypes.getInstanceOf().getIdForValue(genreItem);
-                            if (genreId == null && !"".equals(genreName)) {
-                                genreName = "Other";
-                            }
-                        }
-                        if (genre.length() > 0) {
-                            genre.append(", ");
-                        }
-                        genre.append(genreName);
-                    }
-                    fileTags.setGenre(genre.toString());
-
+                    String genre = Helper.getNormalizedGenreValue(genreValue);
+                    fileTags.setGenre(genre);
+                    break;
+                case 7:
+                    fileTags.setComment((String) value);
                     break;
                 default:
                     break;

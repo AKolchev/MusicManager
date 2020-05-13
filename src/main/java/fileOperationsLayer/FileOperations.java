@@ -31,6 +31,13 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.flac.FlacTag;
+import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
+import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
+import org.jaudiotagger.tag.id3.AbstractTagFrame;
+import org.jaudiotagger.tag.id3.ID3v22Tag;
+import org.jaudiotagger.tag.id3.ID3v24FieldKey;
+import org.jaudiotagger.tag.id3.ID3v24Frames;
+import org.jaudiotagger.tag.id3.ID3v24Tag;
 import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import utils.Helper;
@@ -115,44 +122,33 @@ public class FileOperations {
     public void loadMusicFiles(File[] files) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
         LogManager.getLogManager().reset();
         AudioFile audioFile;
+        //MP3File audioFile;
         MusicFileTags fileTags;
 
         for (File file : files) {
             audioFile = AudioFileIO.read(file);
+            //audioFile = (MP3File) AudioFileIO.read(file);
 
             Tag fileTag = audioFile.getTag();
             if (fileTag != null) {
                 fileTags = new MusicFileTags();
 
                 fileTags.setFileName(file.getName());
-                fileTags.setAlbumArtist(fileTag.getValue(FieldKey.ARTIST, 0));
-                String genreValue = fileTag.getValue(FieldKey.GENRE, 0).replace(")", "").replace("(", "").trim();
+                fileTags.setTitle(fileTag.getValue(FieldKey.TITLE, 0));
+                fileTags.setArtist(fileTag.getValue(FieldKey.ARTIST, 0));
+                fileTags.setAlbum(fileTag.getValue(FieldKey.ALBUM, 0));
+                fileTags.setAlbumArtist(fileTag.getValue(FieldKey.ALBUM_ARTIST, 0));
 
-                if (genreValue != null && !"".equals(genreValue.trim())) {
-                    StringBuilder genre = new StringBuilder();
-
-                    String[] genreValues = genreValue.split(",");
-                    for (String genreItem : genreValues) {
-                        genreItem = genreItem.trim();
-                        Integer genreId = Helper.tryParseInt(genreItem);
-                        String genreName;
-                        if (genreId != null) {
-                            genreName = GenreTypes.getInstanceOf().getValueForId(genreId);
-                        } else {
-                            genreName = genreItem;
-                            genreId = GenreTypes.getInstanceOf().getIdForValue(genreItem);
-                            if (genreId == null) {
-                                genreName = "Other";
-                            }
-                        }
-                        if (genre.length() > 0) {
-                            genre.append(", ");
-                        }
-                        genre.append(genreName);
-                    }
-                    fileTags.setGenre(genre.toString());
+                String year = fileTag.getValue(FieldKey.YEAR, 0);
+                if (!"".equalsIgnoreCase(year)) {
+                    fileTags.setYear(Integer.parseInt(year));
                 }
-
+                String genreValue = fileTag.getValue(FieldKey.GENRE, 0).replace(")", "").replace("(", "").trim();
+                if (genreValue != null && !"".equals(genreValue.trim())) {
+                    String genre = Helper.getNormalizedGenreValue(genreValue);
+                    fileTags.setGenre(genre);
+                }
+                fileTags.setComment(fileTag.getValue(FieldKey.COMMENT, 0));
                 fileTags.setFileLocation(file.getCanonicalPath());
                 fileTags.setIsVisible(true);
                 musicFilesTags.add(fileTags);
@@ -176,17 +172,8 @@ public class FileOperations {
     }
 
     public void saveMusicFiles() throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException, CannotWriteException {
-        //FileTypeEnum fileType;
-        //MusicFileTypeFactory fileTypeFactory;
-
         for (MusicFileTags fileTags : musicFilesTags) {
             String fileExtension = Helper.getFileExtension(fileTags.getFileLocation());
-            //fileType = fileExtension.equalsIgnoreCase("mp3") ? FileTypeEnum.FLAC : FileTypeEnum.MP3;
-            //fileType = FileTypeEnum.valueOf(fileExtension.toUpperCase());
-
-            //fileTypeFactory = new MusicFileTypeFactory(fileType);
-            //MusicFile musicFile = fileTypeFactory.getMusicFileType();
-            //musicFile.editMusicFile(fileTags);
             if ("mp3".equalsIgnoreCase(fileExtension)) {
                 editMp3File(fileTags);
             } else if ("flac".equalsIgnoreCase(fileExtension)) {
@@ -199,12 +186,36 @@ public class FileOperations {
 
         String fileLocation = fileTags.getFileLocation();
         File file = new File(fileLocation);
-        MP3File mp3File = (MP3File) AudioFileIO.read(file);
-        Tag tag = mp3File.getTagAndConvertOrCreateAndSetDefault();
+
+        MP3File mp3File = new MP3File(file.getAbsolutePath());
+        ID3v24Tag tag = new ID3v24Tag();
+
+        mp3File.setID3v2Tag(tag);
+
+        if (fileTags.getTitle() != null) {
+            tag.setField(FieldKey.TITLE, fileTags.getTitle());
+        }
         if (fileTags.getArtist() != null) {
             tag.setField(FieldKey.ARTIST, fileTags.getArtist());
         }
+        if (fileTags.getAlbum() != null) {
+            tag.setField(FieldKey.ALBUM, fileTags.getAlbum());
+        }
+        if (fileTags.getAlbumArtist() != null) {
+            tag.setField(FieldKey.ALBUM_ARTIST, fileTags.getAlbumArtist());
+        }
+
+        tag.setField(FieldKey.YEAR, String.valueOf(fileTags.getYear()));
+
+        if (fileTags.getGenre() != null) {
+            tag.setField(FieldKey.GENRE, fileTags.getGenre());
+        }
+        if (fileTags.getComment() != null) {
+            tag.setField(FieldKey.COMMENT, fileTags.getComment());
+        }
+
         mp3File.commit();
+        mp3File.save();
     }
 
     public void editFlacFile(MusicFileTags fileTags) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException, CannotWriteException {
@@ -212,11 +223,28 @@ public class FileOperations {
         FlacTag tag = (FlacTag) audioFile.getTag();
         VorbisCommentTag vorbisTag = tag.getVorbisCommentTag();
 
+        if (fileTags.getTitle() != null) {
+            vorbisTag.setField(FlacCommentKeysEnum.TITLE.toString(), fileTags.getTitle());
+        }
+        if (fileTags.getArtist() != null) {
+            vorbisTag.setField(FlacCommentKeysEnum.ARTIST.toString(), fileTags.getArtist());
+        }
+        if (fileTags.getAlbum() != null) {
+            vorbisTag.setField(FlacCommentKeysEnum.ALBUM.toString(), fileTags.getAlbum());
+        }
+
         if (fileTags.getAlbumArtist() != null) {
             vorbisTag.setField(FlacCommentKeysEnum.ALBUMARTIST.toString(), fileTags.getAlbumArtist());
         }
+
+        vorbisTag.setField(FlacCommentKeysEnum.YEAR.toString(), String.valueOf(fileTags.getYear()));
+
         if (fileTags.getGenre() != null) {
             vorbisTag.setField(FlacCommentKeysEnum.GENRE.toString(), fileTags.getGenre());
+        }
+
+        if (fileTags.getComment() != null) {
+            vorbisTag.setField(FlacCommentKeysEnum.COMMENT.toString(), fileTags.getComment());
         }
 
         audioFile.commit();

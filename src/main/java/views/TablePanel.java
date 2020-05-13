@@ -36,7 +36,8 @@ public class TablePanel extends JTable {
         this.popup = new JPopupMenu();
 
         table.setRowHeight(20);
-
+        table.getColumnModel().getColumn(5).setPreferredWidth(50);
+        
         JMenuItem removeItem = new JMenuItem("Delete row");
         popup.add(removeItem);
 

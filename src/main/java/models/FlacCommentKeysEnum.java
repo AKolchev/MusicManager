@@ -14,7 +14,7 @@ public enum FlacCommentKeysEnum {
     ARTIST("ARTIST"),
     ALBUMARTIST("ALBUMARTIST"),
     TITLE("TITLE"),
-    YEAR("YEAR"),
+    YEAR("DATE"),
     COMMENT("COMMENT"),
     GENRE("GENRE");
     
