@@ -174,10 +174,12 @@ public class FileOperations {
     public void saveMusicFiles() throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException, CannotWriteException {
         for (MusicFileTags fileTags : musicFilesTags) {
             String fileExtension = Helper.getFileExtension(fileTags.getFileLocation());
-            if ("mp3".equalsIgnoreCase(fileExtension)) {
-                editMp3File(fileTags);
-            } else if ("flac".equalsIgnoreCase(fileExtension)) {
-                editFlacFile(fileTags);
+            if (fileTags.getModified()) {
+                if ("mp3".equalsIgnoreCase(fileExtension)) {
+                    editMp3File(fileTags);
+                } else if ("flac".equalsIgnoreCase(fileExtension)) {
+                    editFlacFile(fileTags);
+                }
             }
         }
     }

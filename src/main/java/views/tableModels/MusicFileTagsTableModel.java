@@ -39,6 +39,7 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
     public void setValueAt(Object value, int row, int col) {
         if (fo != null) {
             MusicFileTags fileTags = fo.get(row);
+            fileTags.setModified(true);
             switch (col) {
                 case 1:
                     fileTags.setTitle((String) value);

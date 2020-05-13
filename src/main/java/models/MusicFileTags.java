@@ -21,9 +21,10 @@ public class MusicFileTags implements Serializable {
     private int year;
     private String genre;
     private String comment;
+    private boolean modified;
     private String fileName;
     private String fileLocation;
-    private Boolean isVisible;
+    private boolean isVisible;
 
     public String getAlbum() {
         return album;
@@ -85,6 +86,14 @@ public class MusicFileTags implements Serializable {
         return comment;
     }
 
+    public void setModified(boolean modified) {
+        this.modified = modified;
+    }
+
+    public boolean getModified() {
+        return modified;
+    }
+
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
@@ -92,7 +101,7 @@ public class MusicFileTags implements Serializable {
     public String getFileName() {
         return fileName;
     }
-    
+
     public void setFileLocation(String fileLocation) {
         this.fileLocation = fileLocation;
     }

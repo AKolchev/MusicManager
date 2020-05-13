@@ -72,11 +72,15 @@ public class MainFrame extends JFrame {
         });
 
         toolbar.setToolbarButtonsListener(new ToolbarButtonsEventListener() {
-           
+
             @Override
             public void reloadMusicFilesEvent() {
-                controller.reloadMusicFiles();
-                tablePanel.refresh();
+
+                int action = JOptionPane.showConfirmDialog(MainFrame.this, "Any unsaved changes will be lost!", "Reload music files", JOptionPane.OK_CANCEL_OPTION);
+                if (action == JOptionPane.OK_OPTION) {
+                    controller.reloadMusicFiles();
+                    tablePanel.refresh();
+                }
             }
 
             @Override
@@ -123,11 +127,13 @@ public class MainFrame extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenuItem importMusicFilesMenuItem = new JMenuItem("Import music files...");
+        JMenuItem saveMusicFilesMenuItem = new JMenuItem("Save");
         JMenuItem exportProjectMenuItem = new JMenuItem("Export project..");
         JMenuItem importProjectMenuItem = new JMenuItem("Import project..");
         JMenuItem exitMenuItem = new JMenuItem("Exit");
 
         fileMenu.add(importMusicFilesMenuItem);
+        fileMenu.add(saveMusicFilesMenuItem);
         fileMenu.addSeparator();
         fileMenu.add(importProjectMenuItem);
         fileMenu.add(exportProjectMenuItem);
@@ -174,15 +180,17 @@ public class MainFrame extends JFrame {
                 fileChooser.setFileFilter(new ImportSongsFileFilter());
                 fileChooser.setMultiSelectionEnabled(true);
                 if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
-                    //try {
                     fileChooser.setSelectedFile(new File(""));
                     controller.loadMusicFiles(fileChooser.getSelectedFiles());
-
                     tablePanel.refresh();
-                    //} catch (IOException ex) {
-                    //    JOptionPane.showMessageDialog(MainFrame.this, ex, "Exception while loading files", JOptionPane.ERROR_MESSAGE);
-                    //}
                 }
+            }
+        });
+
+        saveMusicFilesMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.saveMusicFiles();
             }
         });
 
