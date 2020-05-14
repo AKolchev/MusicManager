@@ -57,6 +57,7 @@ public class Helper {
             if (genreId != null) {
                 genreName = GenreTypes.getInstanceOf().getValueForId(genreId);
             } else {
+                genreItem = genreItem.toLowerCase().substring(0, 1).toUpperCase() + genreItem.substring(1);
                 genreName = genreItem;
                 genreId = GenreTypes.getInstanceOf().getIdForValue(genreItem);
                 if (genreId == null && !"".equals(genreName)) {

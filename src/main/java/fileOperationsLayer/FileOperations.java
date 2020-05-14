@@ -51,7 +51,6 @@ public class FileOperations {
 //
 //        musicFilesTags.add(musicFileTags);
 //    }
-
     /**
      *
      * @return
@@ -85,8 +84,13 @@ public class FileOperations {
         } else {
             musicFilesTags.forEach(x -> x.setIsVisible(false));
             musicFilesTags.stream().filter(x -> x.getTitle().toLowerCase().contains(filter)
+                    || x.getAlbum().toLowerCase().contains(filter)
                     || x.getAlbumArtist().toLowerCase().contains(filter)
+                    || x.getArtist().toLowerCase().contains(filter)
+                    || x.getComment().toLowerCase().contains(filter)
+                    || x.getFileName().toLowerCase().contains(filter)
                     || x.getGenre().toLowerCase().contains(filter)
+                    || String.valueOf(x.getYear()).toLowerCase().contains(filter)
             ).forEach(x -> x.setIsVisible(true));
         }
         Collections.sort(musicFilesTags, new SortTableRows());
