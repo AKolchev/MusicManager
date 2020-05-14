@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.LogManager;
 import models.FlacCommentKeysEnum;
 import models.MusicFileTags;
 import org.jaudiotagger.audio.AudioFile;
@@ -31,14 +30,7 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.flac.FlacTag;
-import org.jaudiotagger.tag.id3.AbstractID3v2Frame;
-import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
-import org.jaudiotagger.tag.id3.AbstractTagFrame;
-import org.jaudiotagger.tag.id3.ID3v22Tag;
-import org.jaudiotagger.tag.id3.ID3v24FieldKey;
-import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
-import org.jaudiotagger.tag.reference.GenreTypes;
 import org.jaudiotagger.tag.vorbiscomment.VorbisCommentTag;
 import utils.Helper;
 import utils.SortTableRows;
@@ -49,45 +41,40 @@ import utils.SortTableRows;
  */
 public class FileOperations {
 
-    private List<MusicFileTags> musicFilesTags;
+    private final List<MusicFileTags> musicFilesTags;
 
     public FileOperations() {
         this.musicFilesTags = new LinkedList<>();
     }
 
-    public void addMusicFiles(MusicFileTags musicFileTags) {
-
-        musicFilesTags.add(musicFileTags);
-    }
+//    public void addMusicFiles(MusicFileTags musicFileTags) {
+//
+//        musicFilesTags.add(musicFileTags);
+//    }
 
     /**
      *
      * @return
      */
     public List<MusicFileTags> getMusicFilesTags() {
-
         return Collections.unmodifiableList(musicFilesTags);
     }
 
     public void saveProjectToFile(File file) throws IOException {
         FileOutputStream fos = new FileOutputStream(file);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-        MusicFileTags[] fileTags = musicFilesTags.toArray(new MusicFileTags[musicFilesTags.size()]);
-
-        oos.writeObject(fileTags);
-
-        oos.close();
+        try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            MusicFileTags[] fileTags = musicFilesTags.toArray(new MusicFileTags[musicFilesTags.size()]);
+            oos.writeObject(fileTags);
+        }
     }
 
     public void loadProjectFromFile(File file) throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream(file);
-        var ois = new ObjectInputStream(fis);
-
-        MusicFileTags[] fileTags = (MusicFileTags[]) ois.readObject();
-        musicFilesTags.clear();
-        musicFilesTags.addAll(Arrays.asList(fileTags));
-        ois.close();
+        try (java.io.ObjectInputStream ois = new ObjectInputStream(fis)) {
+            MusicFileTags[] fileTags = (MusicFileTags[]) ois.readObject();
+            musicFilesTags.clear();
+            musicFilesTags.addAll(Arrays.asList(fileTags));
+        }
     }
 
     public void filterMusicFiles(String filterKeyWord) {
@@ -105,7 +92,8 @@ public class FileOperations {
         Collections.sort(musicFilesTags, new SortTableRows());
     }
 
-    public void reloadMusicFiles() throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
+    public void reloadMusicFiles() throws CannotReadException, IOException,
+            TagException, ReadOnlyFileException, InvalidAudioFrameException {
         ArrayList<File> musicFiles = new ArrayList<>();
 
         musicFilesTags.forEach((musicFile) -> {
@@ -119,19 +107,14 @@ public class FileOperations {
         loadMusicFiles(files);
     }
 
-    public void loadMusicFiles(File[] files) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
-        LogManager.getLogManager().reset();
-        AudioFile audioFile;
-        //MP3File audioFile;
-        MusicFileTags fileTags;
+    public void loadMusicFiles(File[] files) throws CannotReadException, IOException,
+            TagException, ReadOnlyFileException, InvalidAudioFrameException {
 
         for (File file : files) {
-            audioFile = AudioFileIO.read(file);
-            //audioFile = (MP3File) AudioFileIO.read(file);
-
+            AudioFile audioFile = AudioFileIO.read(file);
             Tag fileTag = audioFile.getTag();
             if (fileTag != null) {
-                fileTags = new MusicFileTags();
+                MusicFileTags fileTags = new MusicFileTags();
 
                 fileTags.setFileName(file.getName());
                 fileTags.setTitle(fileTag.getValue(FieldKey.TITLE, 0));
@@ -166,7 +149,6 @@ public class FileOperations {
             if (rowsToBeDeleted.contains(rowCount)) {
                 collection.remove();
             }
-
             rowCount++;
         }
     }
@@ -188,10 +170,8 @@ public class FileOperations {
 
         String fileLocation = fileTags.getFileLocation();
         File file = new File(fileLocation);
-
         MP3File mp3File = new MP3File(file.getAbsolutePath());
         ID3v24Tag tag = new ID3v24Tag();
-
         mp3File.setID3v2Tag(tag);
 
         if (fileTags.getTitle() != null) {
@@ -206,9 +186,7 @@ public class FileOperations {
         if (fileTags.getAlbumArtist() != null) {
             tag.setField(FieldKey.ALBUM_ARTIST, fileTags.getAlbumArtist());
         }
-
         tag.setField(FieldKey.YEAR, String.valueOf(fileTags.getYear()));
-
         if (fileTags.getGenre() != null) {
             tag.setField(FieldKey.GENRE, fileTags.getGenre());
         }

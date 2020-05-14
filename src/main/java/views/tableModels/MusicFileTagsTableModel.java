@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.table.AbstractTableModel;
 import models.MusicFileTags;
-import org.jaudiotagger.tag.reference.GenreTypes;
 import utils.Helper;
 
 /**
@@ -18,7 +17,7 @@ import utils.Helper;
  */
 public class MusicFileTagsTableModel extends AbstractTableModel {
 
-    private List<MusicFileTags> fo;
+    private List<MusicFileTags> musicTags;
     private String[] colNames = {"File name", "Title", "Artist", "Album", "Album Artist", "Year", "Genre", "Comment"};
 
     public MusicFileTagsTableModel() {
@@ -37,8 +36,8 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
 
     @Override
     public void setValueAt(Object value, int row, int col) {
-        if (fo != null) {
-            MusicFileTags fileTags = fo.get(row);
+        if (musicTags != null) {
+            MusicFileTags fileTags = musicTags.get(row);
             fileTags.setModified(true);
             switch (col) {
                 case 1:
@@ -71,12 +70,12 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
     }
 
     public void setData(List<MusicFileTags> data) {
-        this.fo = data;
+        this.musicTags = data;
     }
 
     @Override
     public int getRowCount() {
-        return fo.stream().filter(x -> x.getIsVisible() == true).collect(Collectors.toList()).size();
+        return musicTags.stream().filter(x -> x.getIsVisible() == true).collect(Collectors.toList()).size();
     }
 
     @Override
@@ -111,7 +110,7 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int row, int column) {
 
-        MusicFileTags fileTags = fo.get(row);
+        MusicFileTags fileTags = musicTags.get(row);
         if (fileTags.getIsVisible() == true) {
             switch (column) {
                 case 0:

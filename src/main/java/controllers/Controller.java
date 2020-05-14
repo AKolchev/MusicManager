@@ -18,7 +18,6 @@ import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.TagException;
-import views.MainFrame;
 
 /**
  *
@@ -26,33 +25,32 @@ import views.MainFrame;
  */
 public class Controller {
 
-    FileOperations fo = new FileOperations();
+    FileOperations fileOperations = new FileOperations();
 
     public List<MusicFileTags> getMusicFilesTags() {
-        return fo.getMusicFilesTags();
+        return fileOperations.getMusicFilesTags();
     }
 
     public void loadMusicFiles(File[] selectedFiles) {
         try {
-            fo.loadMusicFiles(selectedFiles);
+            fileOperations.loadMusicFiles(selectedFiles);
         } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
             JOptionPane.showMessageDialog(null, "Error while loading files!", "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     public void removeMusicFiles(int[] rows) {
-        fo.removeMusicFiles(rows);
+        fileOperations.removeMusicFiles(rows);
     }
 
     public void filterMusicFilesTable(String filter) {
-        fo.filterMusicFiles(filter);
+        fileOperations.filterMusicFiles(filter);
     }
 
     public void saveProjectToFile(File selectedFile) {
         try {
-            fo.saveProjectToFile(selectedFile);
+            fileOperations.saveProjectToFile(selectedFile);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Error while saving project file!", "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
@@ -61,7 +59,7 @@ public class Controller {
 
     public void loadProjectFromFile(File selectedFile) {
         try {
-            fo.loadProjectFromFile(selectedFile);
+            fileOperations.loadProjectFromFile(selectedFile);
         } catch (IOException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Error while loading project file!", "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
@@ -70,7 +68,7 @@ public class Controller {
 
     public void reloadMusicFiles() {
         try {
-            fo.reloadMusicFiles();
+            fileOperations.reloadMusicFiles();
         } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
             JOptionPane.showMessageDialog(null, "Error while reloading music files!", "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
@@ -79,11 +77,10 @@ public class Controller {
 
     public void saveMusicFiles() {
         try {
-            fo.saveMusicFiles();
+            fileOperations.saveMusicFiles();
         } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException | CannotWriteException ex) {
             JOptionPane.showMessageDialog(null, "Error while saving music files!", "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }

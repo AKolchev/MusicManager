@@ -35,11 +35,20 @@ public class Toolbar extends JToolBar implements ActionListener {
     private JButton reloadMusicFileTagsBtn;
     private JButton saveMusicTagsBtn;
     private JTextField searchField;
-
+    private JLabel iconLabel;
     private ToolbarButtonsEventListener buttonsEventListener;
     private TableFilteredListener tableFilteredListener;
+    private JLabel searchLabel;
 
     public Toolbar() {
+        addReloadButton();
+        addSaveButton();
+        add(Box.createHorizontalGlue());
+        addSearchField();
+        addEventListeners();
+    }
+
+    private void addReloadButton() {
 
         reloadMusicFileTagsBtn = new JButton();
         reloadMusicFileTagsBtn.setLayout(new FlowLayout());
@@ -47,28 +56,39 @@ public class Toolbar extends JToolBar implements ActionListener {
         reloadMusicFileTagsBtn.setToolTipText("Refresh music filess");
         reloadMusicFileTagsBtn.addActionListener(this);
         add(reloadMusicFileTagsBtn);
+    }
 
+    private void addSaveButton() {
         saveMusicTagsBtn = new JButton();
         saveMusicTagsBtn.setLayout(new FlowLayout());
         saveMusicTagsBtn.setIcon(createIcon("images/refresh-icon.png"));
         saveMusicTagsBtn.setToolTipText("Save music tagss");
         saveMusicTagsBtn.addActionListener(this);
         add(saveMusicTagsBtn);
+    }
 
-        add(Box.createHorizontalGlue());
-
+    private void addSearchField() {
         searchField = new JTextField(25);
         searchField.setLayout(new BorderLayout());
-
-        JLabel iconLabel = new JLabel(createIcon("images/refresh-icon.png"));
+        iconLabel = new JLabel(createIcon("images/refresh-icon.png"));
         iconLabel.setCursor(Cursor.getDefaultCursor());
         searchField.add(iconLabel, BorderLayout.LINE_END);
-
-        JLabel searchLabel = new JLabel("Search by name, artist, genre..");
+        searchLabel = new JLabel("Search by name, artist, genre..");
         searchLabel.setCursor(Cursor.getDefaultCursor());
         searchField.add(searchLabel, BorderLayout.LINE_START);
         add(searchField);
+    }
 
+    private ImageIcon createIcon(String fileName) {
+        URL url = getClass().getClassLoader().getResource(fileName);
+        if (url == null) {
+            System.err.println("Unable to load image: " + url);
+        }
+        ImageIcon icon = new ImageIcon(url, "Icon Image");
+        return icon;
+    }
+
+    private void addEventListeners() {
         iconLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -101,16 +121,6 @@ public class Toolbar extends JToolBar implements ActionListener {
                 }
             }
         });
-
-    }
-
-    private ImageIcon createIcon(String fileName) {
-        URL url = getClass().getClassLoader().getResource(fileName);
-        if (url == null) {
-            System.err.println("Unable to load image: " + url);
-        }
-        ImageIcon icon = new ImageIcon(url, "Icon Image");
-        return icon;
     }
 
     public void setToolbarButtonsListener(ToolbarButtonsEventListener listener) {
@@ -126,8 +136,7 @@ public class Toolbar extends JToolBar implements ActionListener {
         JButton btnSource = (JButton) e.getSource();
         if (btnSource == reloadMusicFileTagsBtn) {
             buttonsEventListener.reloadMusicFilesEvent();
-        }
-        else if(btnSource == saveMusicTagsBtn){
+        } else if (btnSource == saveMusicTagsBtn) {
             buttonsEventListener.saveMusicFilesEvent();
         }
     }

@@ -38,6 +38,17 @@ public class MainFrame extends JFrame {
     private JFileChooser fileChooser;
     private Controller controller;
     private TablePanel tablePanel;
+    private JMenuBar menuBar;
+
+    private JMenu fileMenu;
+    private JMenuItem importMusicFilesMenuItem;
+    private JMenuItem saveMusicFilesMenuItem;
+    private JMenuItem exportProjectMenuItem;
+    private JMenuItem importProjectMenuItem;
+    private JMenuItem exitMenuItem;
+    private JMenu viewMenu;
+    private JCheckBoxMenuItem fullScreenMenu;
+    private JCheckBoxMenuItem showToolbarMenuItem;
 
     /**
      * MainFrame constructor Initializes all necessary components
@@ -45,17 +56,33 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         super("Music Manager");
         setLookAndFeel();
-
-        setLayout(new BorderLayout());
-
+        initializeFormComponents();
+        setFormLayout();
         setJMenuBar(createMenuBar());
+        setFrameEvents();
 
+        tablePanel.setData(controller.getMusicFilesTags());
+        setVisible(true);
+    }
+
+    private void setFormLayout() {
+        setLayout(new BorderLayout());
+        add(tablePanel, BorderLayout.CENTER);
+        add(toolbar, BorderLayout.PAGE_START);
+        setMinimumSize(new Dimension(500, 400));
+        setSize(700, 600);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+    }
+
+    private void initializeFormComponents() {
         toolbar = new Toolbar();
         tablePanel = new TablePanel();
         fileChooser = new JFileChooser();
         controller = new Controller();
+    }
 
-        tablePanel.setData(controller.getMusicFilesTags());
+    private void setFrameEvents() {
+
         tablePanel.setTableRowDeletedListener(new TableRowDeletedListener() {
             @Override
             public void rowDeleted(int[] rows) {
@@ -75,12 +102,7 @@ public class MainFrame extends JFrame {
 
             @Override
             public void reloadMusicFilesEvent() {
-
-                int action = JOptionPane.showConfirmDialog(MainFrame.this, "Any unsaved changes will be lost!", "Reload music files", JOptionPane.OK_CANCEL_OPTION);
-                if (action == JOptionPane.OK_OPTION) {
-                    controller.reloadMusicFiles();
-                    tablePanel.refresh();
-                }
+                reloadMusicFiles();
             }
 
             @Override
@@ -96,14 +118,14 @@ public class MainFrame extends JFrame {
                 System.gc();
             }
         });
+    }
 
-        add(tablePanel, BorderLayout.CENTER);
-        add(toolbar, BorderLayout.PAGE_START);
-
-        setMinimumSize(new Dimension(500, 400));
-        setSize(700, 600);
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setVisible(true);
+    private void reloadMusicFiles() {
+        int action = JOptionPane.showConfirmDialog(MainFrame.this, "Any unsaved changes will be lost!", "Reload music files", JOptionPane.OK_CANCEL_OPTION);
+        if (action == JOptionPane.OK_OPTION) {
+            controller.reloadMusicFiles();
+            tablePanel.refresh();
+        }
     }
 
     /**
@@ -124,13 +146,23 @@ public class MainFrame extends JFrame {
 
     private JMenuBar createMenuBar() {
 
-        JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("File");
-        JMenuItem importMusicFilesMenuItem = new JMenuItem("Import music files...");
-        JMenuItem saveMusicFilesMenuItem = new JMenuItem("Save");
-        JMenuItem exportProjectMenuItem = new JMenuItem("Export project..");
-        JMenuItem importProjectMenuItem = new JMenuItem("Import project..");
-        JMenuItem exitMenuItem = new JMenuItem("Exit");
+        JMenuBar menuBar = constructMenuItems();
+        addMenuEventListeners();
+        setMenuShortKeys();
+
+        return menuBar;
+    }
+
+    private JMenuBar constructMenuItems() {
+
+        menuBar = new JMenuBar();
+
+        fileMenu = new JMenu("File");
+        importMusicFilesMenuItem = new JMenuItem("Import music files...");
+        saveMusicFilesMenuItem = new JMenuItem("Save");
+        exportProjectMenuItem = new JMenuItem("Export project..");
+        importProjectMenuItem = new JMenuItem("Import project..");
+        exitMenuItem = new JMenuItem("Exit");
 
         fileMenu.add(importMusicFilesMenuItem);
         fileMenu.add(saveMusicFilesMenuItem);
@@ -141,49 +173,39 @@ public class MainFrame extends JFrame {
         fileMenu.add(exitMenuItem);
         menuBar.add(fileMenu);
 
-        JMenu viewMenu = new JMenu("View");
-        JCheckBoxMenuItem fullScreenMenu = new JCheckBoxMenuItem("Full Screen");
+        viewMenu = new JMenu("View");
+        fullScreenMenu = new JCheckBoxMenuItem("Full Screen");
         fullScreenMenu.setSelected(false);
 
-        JCheckBoxMenuItem showToolbarMenuItem = new JCheckBoxMenuItem("Show Toolbar");
+        showToolbarMenuItem = new JCheckBoxMenuItem("Show Toolbar");
         showToolbarMenuItem.setSelected(true);
-
         viewMenu.add(fullScreenMenu);
         viewMenu.add(showToolbarMenuItem);
         menuBar.add(viewMenu);
 
+        return menuBar;
+    }
+
+    private void addMenuEventListeners() {
+
         showToolbarMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();
-
-                toolbar.setVisible(menuItem.isSelected());
+                setToolbarVisibility(e);
             }
         });
 
         fullScreenMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();
-
-                if (menuItem.isSelected()) {
-                    setExtendedState(JFrame.MAXIMIZED_BOTH);
-                } else {
-                    setSize(600, 500);
-                }
+                setScreenMode(e);
             }
         });
 
         importMusicFilesMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fileChooser.setFileFilter(new ImportSongsFileFilter());
-                fileChooser.setMultiSelectionEnabled(true);
-                if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
-                    fileChooser.setSelectedFile(new File(""));
-                    controller.loadMusicFiles(fileChooser.getSelectedFiles());
-                    tablePanel.refresh();
-                }
+                importMusicFiles();
             }
         });
 
@@ -197,49 +219,89 @@ public class MainFrame extends JFrame {
         exportProjectMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fileChooser.setFileFilter(new ProjectFileFilter());
-                fileChooser.setSelectedFile(new File("My music manager project.mmproj"));
-                fileChooser.setMultiSelectionEnabled(false);
-                if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
-                    controller.saveProjectToFile(fileChooser.getSelectedFile());
-                }
+                exportProject();
             }
         });
 
         importProjectMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fileChooser.setFileFilter(new ProjectFileFilter());
-                fileChooser.setMultiSelectionEnabled(false);
-                if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
-                    controller.loadProjectFromFile(fileChooser.getSelectedFile());
-                    tablePanel.refresh();
-                }
+                importProject();
             }
         });
 
         exitMenuItem.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                int action = JOptionPane.showConfirmDialog(MainFrame.this, "Do you really want to exit the application?", "Exit program", JOptionPane.OK_CANCEL_OPTION);
-                if (action == JOptionPane.OK_OPTION) {
-                    WindowListener[] listeners = getWindowListeners();
-
-                    for (WindowListener listener : listeners) {
-                        listener.windowClosing(new WindowEvent(MainFrame.this, 0));
-                    }
-                }
+                applicationExit();
             }
         });
+    }
 
+    private void setToolbarVisibility(ActionEvent e) {
+        JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();
+        toolbar.setVisible(menuItem.isSelected());
+
+    }
+
+    private void setScreenMode(ActionEvent e) {
+        JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();
+        if (menuItem.isSelected()) {
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+        } else {
+            setSize(600, 500);
+        }
+    }
+
+    private void importMusicFiles() {
+        fileChooser.setFileFilter(new ImportSongsFileFilter());
+        fileChooser.setMultiSelectionEnabled(true);
+        if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+            fileChooser.setSelectedFile(new File(""));
+            controller.loadMusicFiles(fileChooser.getSelectedFiles());
+            tablePanel.refresh();
+        }
+    }
+
+    private void exportProject() {
+        fileChooser.setFileFilter(new ProjectFileFilter());
+        fileChooser.setSelectedFile(new File("My music manager project.mmproj"));
+        fileChooser.setMultiSelectionEnabled(false);
+        if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+            controller.saveProjectToFile(fileChooser.getSelectedFile());
+        }
+    }
+
+    private void importProject() {
+        fileChooser.setFileFilter(new ProjectFileFilter());
+        fileChooser.setMultiSelectionEnabled(false);
+        if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+            controller.loadProjectFromFile(fileChooser.getSelectedFile());
+            tablePanel.refresh();
+        }
+    }
+
+    private void applicationExit() {
+        String popUpMessage = "Do you really want to exit the application?";
+        String popUpTitle = "Exit program";
+        int action = JOptionPane.showConfirmDialog(MainFrame.this, popUpMessage, popUpTitle, JOptionPane.OK_CANCEL_OPTION);
+
+        if (action == JOptionPane.OK_OPTION) {
+            WindowListener[] listeners = getWindowListeners();
+
+            for (WindowListener listener : listeners) {
+                listener.windowClosing(new WindowEvent(MainFrame.this, 0));
+            }
+        }
+    }
+
+    private void setMenuShortKeys() {
         fileMenu.setMnemonic(KeyEvent.VK_F);
         importMusicFilesMenuItem.setMnemonic(KeyEvent.VK_I);
+        saveMusicFilesMenuItem.setMnemonic(KeyEvent.VK_S);
         exportProjectMenuItem.setMnemonic(KeyEvent.VK_E);
+        importProjectMenuItem.setMnemonic(KeyEvent.VK_P);
         exitMenuItem.setMnemonic(KeyEvent.VK_X);
         exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
-
-        return menuBar;
     }
 }

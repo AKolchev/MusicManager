@@ -25,21 +25,27 @@ import views.tableModels.MusicFileTagsTableModel;
  */
 public class TablePanel extends JTable {
 
-    private JTable table;
-    private MusicFileTagsTableModel tableModel;
-    private JPopupMenu popup;
+    private final JTable table;
+    private final MusicFileTagsTableModel tableModel;
+    private final JPopupMenu popup;
+    private final JMenuItem removeItem;
     private TableRowDeletedListener tableRowDeletedListener;
 
     public TablePanel() {
         this.tableModel = new MusicFileTagsTableModel();
         this.table = new JTable(tableModel);
         this.popup = new JPopupMenu();
+        this.removeItem = new JMenuItem("Delete row");
 
+        popup.add(removeItem);
         table.setRowHeight(20);
         table.getColumnModel().getColumn(5).setPreferredWidth(50);
-        
-        JMenuItem removeItem = new JMenuItem("Delete row");
-        popup.add(removeItem);
+        addEventListeners();
+        setLayout(new BorderLayout());
+        add(new JScrollPane(table), BorderLayout.CENTER);
+    }
+
+    private void addEventListeners() {
 
         table.addMouseListener(new MouseAdapter() {
             @Override
@@ -62,17 +68,14 @@ public class TablePanel extends JTable {
                 }
             }
         });
-
-        setLayout(new BorderLayout());
-        add(new JScrollPane(table), BorderLayout.CENTER);
     }
 
     void refresh() {
         tableModel.fireTableDataChanged();
     }
 
-    public void setData(List<MusicFileTags> fo) {
-        tableModel.setData(fo);
+    public void setData(List<MusicFileTags> musicFileTags) {
+        tableModel.setData(musicFileTags);
     }
 
     public void setTableRowDeletedListener(TableRowDeletedListener listener) {

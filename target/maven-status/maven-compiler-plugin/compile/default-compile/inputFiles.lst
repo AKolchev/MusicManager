@@ -1,16 +1,12 @@
-C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\models\FileTypeEnum.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\utils\ImportSongsFileFilter.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\TablePanel.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\eventListeners\ToolbarButtonsEventListener.java
-C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\models\MusicTagsEnum.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\controllers\Controller.java
-C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\fileOperationsLayer\Mp3File.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\fileOperationsLayer\FileOperations.java
-C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\fileOperationsLayer\MusicFile.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\utils\ProjectFileFilter.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\eventListeners\TableRowDeletedListener.java
+C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\models\FlacCommentKeysEnum.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\utils\SortTableRows.java
-C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\fileOperationsLayer\MusicFileTypeFactory.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\main\App.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\tableModels\MusicFileTagsTableModel.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\eventListeners\TableFilteredListener.java
@@ -18,4 +14,3 @@ C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\models\Musi
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\MainFrame.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\views\Toolbar.java
 C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\utils\Helper.java
-C:\Users\mgkon\Documents\NetBeansProjects\MusicManager\src\main\java\fileOperationsLayer\FlacFile.java
