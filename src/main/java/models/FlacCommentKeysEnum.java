@@ -1,30 +1,54 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package models;
 
 /**
+ * Enumeration containing the flac comment names
  *
- * @author mgkon
+ * @author AKolchev, f55283
  */
 public enum FlacCommentKeysEnum {
+
+    /**
+     * Album comment name
+     */
     ALBUM("ALBUM"),
+    /**
+     * Track artist comment name
+     */
     ARTIST("ARTIST"),
+    /**
+     * Album artist comment name
+     */
     ALBUMARTIST("ALBUMARTIST"),
+    /**
+     * Track title comment name
+     */
     TITLE("TITLE"),
+    /**
+     * Track date comment name
+     */
     YEAR("DATE"),
-    COMMENT("COMMENT"),
+    /**
+     * Track genre
+     */
     GENRE("GENRE");
-    
+
     private final String tagKey;
-    private FlacCommentKeysEnum(String tagName){
-       this.tagKey = tagName; 
+
+    /**
+     * Sets the comment key as a value to the enumeration
+     *
+     * @param tagName The name of the key for the comment
+     */
+    private FlacCommentKeysEnum(String tagName) {
+        this.tagKey = tagName;
     }
-    
+
+    /**
+     *
+     * @return The comment key
+     */
     @Override
-    public String toString(){
+    public String toString() {
         return this.tagKey;
     }
 }

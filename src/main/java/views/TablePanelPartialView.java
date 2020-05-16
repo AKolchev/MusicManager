@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package views;
 
 import java.awt.BorderLayout;
@@ -15,15 +10,17 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import models.MusicFileTags;
+import models.MusicFileTagsModel;
 import eventListeners.TableRowDeletedListener;
 import views.tableModels.MusicFileTagsTableModel;
 
 /**
+ * A partial view of the MainFrame. Contains a table listing the music files
+ * metadata.
  *
  * @author AKolchev, f55283
  */
-public class TablePanel extends JTable {
+public class TablePanelPartialView extends JTable {
 
     private final JTable table;
     private final MusicFileTagsTableModel tableModel;
@@ -31,7 +28,10 @@ public class TablePanel extends JTable {
     private final JMenuItem removeItem;
     private TableRowDeletedListener tableRowDeletedListener;
 
-    public TablePanel() {
+    /**
+     * The class constructor initializes the properties of the table panel.
+     */
+    public TablePanelPartialView() {
         this.tableModel = new MusicFileTagsTableModel();
         this.table = new JTable(tableModel);
         this.popup = new JPopupMenu();
@@ -45,6 +45,9 @@ public class TablePanel extends JTable {
         add(new JScrollPane(table), BorderLayout.CENTER);
     }
 
+    /**
+     * Sets event listeners, for the delete row functionality
+     */
     private void addEventListeners() {
 
         table.addMouseListener(new MouseAdapter() {
@@ -70,14 +73,27 @@ public class TablePanel extends JTable {
         });
     }
 
+    /**
+     * Signals the table model to refresh the table data.
+     */
     void refresh() {
         tableModel.fireTableDataChanged();
     }
 
-    public void setData(List<MusicFileTags> musicFileTags) {
+    /**
+     * Sets data in the table model
+     *
+     * @param musicFileTags The music files metadata sets to be set in the table
+     */
+    public void setData(List<MusicFileTagsModel> musicFileTags) {
         tableModel.setData(musicFileTags);
     }
 
+    /**
+     * Sets a listener for deleted table rows
+     *
+     * @param listener
+     */
     public void setTableRowDeletedListener(TableRowDeletedListener listener) {
         this.tableRowDeletedListener = listener;
     }

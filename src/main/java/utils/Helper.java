@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package utils;
 
 import java.util.ArrayList;
@@ -10,11 +5,18 @@ import java.util.List;
 import org.jaudiotagger.tag.reference.GenreTypes;
 
 /**
+ * An object containing several helper methods
  *
- * @author AKolchev, f55283 TODO - make singleton
+ * @author AKolchev, f55283
  */
 public class Helper {
 
+    /**
+     * Gets the extension of a given file
+     *
+     * @param name The name of the file
+     * @return
+     */
     public static String getFileExtension(String name) {
         int pointIndex = name.lastIndexOf(".");
 
@@ -29,6 +31,13 @@ public class Helper {
         return name.substring(pointIndex + 1, name.length());
     }
 
+    /**
+     * Tries to parse a string value into an Integer. Returns null if the string
+     * is not a numeric value
+     *
+     * @param inputString
+     * @return
+     */
     public static Integer tryParseInt(String inputString) {
         try {
             return Integer.parseInt(inputString);
@@ -37,6 +46,12 @@ public class Helper {
         }
     }
 
+    /**
+     * Converts a given int array to list
+     *
+     * @param intArray the int array to be converted to a list
+     * @return a list of ints
+     */
     public static List<Integer> arrayToList(int[] intArray) {
         List<Integer> newArray = new ArrayList<>();
         for (int item : intArray) {
@@ -46,6 +61,13 @@ public class Helper {
         return newArray;
     }
 
+    /**
+     * Formats the track genre/s, in accordance to the ID3 standard. Supports
+     * multiple genres per track
+     *
+     * @param genreValue The track genre to be normalized
+     * @return a normalized genre value
+     */
     public static String getNormalizedGenreValue(String genreValue) {
         StringBuilder genre = new StringBuilder();
 

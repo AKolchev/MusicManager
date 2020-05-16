@@ -1,15 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package eventListeners;
 
 /**
  *
- * @author mgkon
+ * @author AKolchev, f55283 Interface representing the events fired, upon a
+ * toolbar button click
  */
 public interface ToolbarButtonsEventListener {
-   public void saveMusicFilesEvent();
-   public void reloadMusicFilesEvent();
+
+    /**
+     * An event fired upon Save button click
+     * Music files metadata to be saved into the respective files
+     */
+    public void saveMusicFilesEvent();
+
+    /**
+     * An event fired upon Reload button click
+     * Music files metadata to be reloaded from the file system
+     */
+    public void reloadMusicFilesEvent();
 }

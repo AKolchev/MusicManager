@@ -4,7 +4,7 @@
 package main;
 
 import javax.swing.SwingUtilities;
-import views.MainFrame;
+import views.MainFrameView;
 
 /**
  * @author AKolchev
@@ -18,7 +18,7 @@ public class App {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new MainFrame();
+                new MainFrameView();
             }
         });
     }

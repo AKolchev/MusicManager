@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package views;
 
 import java.awt.BorderLayout;
@@ -27,10 +22,12 @@ import eventListeners.TableFilteredListener;
 import eventListeners.ToolbarButtonsEventListener;
 
 /**
+ * Toolbar partial view of the MainFrame. Contains two buttons, for saving and
+ * reloading music files and a search field, for filtering table contents
  *
- * @author mgkon
+ * @author AKolchev, f55283
  */
-public class Toolbar extends JToolBar implements ActionListener {
+public class ToolbarPartialView extends JToolBar implements ActionListener {
 
     private JButton reloadMusicFileTagsBtn;
     private JButton saveMusicTagsBtn;
@@ -40,7 +37,10 @@ public class Toolbar extends JToolBar implements ActionListener {
     private TableFilteredListener tableFilteredListener;
     private JLabel searchLabel;
 
-    public Toolbar() {
+    /**
+     * The class constructor is used for the toolbar initialization.
+     */
+    public ToolbarPartialView() {
         addReloadButton();
         addSaveButton();
         add(Box.createHorizontalGlue());
@@ -48,6 +48,9 @@ public class Toolbar extends JToolBar implements ActionListener {
         addEventListeners();
     }
 
+    /**
+     * Creates the Reload button.
+     */
     private void addReloadButton() {
 
         reloadMusicFileTagsBtn = new JButton();
@@ -58,6 +61,9 @@ public class Toolbar extends JToolBar implements ActionListener {
         add(reloadMusicFileTagsBtn);
     }
 
+    /**
+     * Creates the Save button.
+     */
     private void addSaveButton() {
         saveMusicTagsBtn = new JButton();
         saveMusicTagsBtn.setLayout(new FlowLayout());
@@ -67,6 +73,9 @@ public class Toolbar extends JToolBar implements ActionListener {
         add(saveMusicTagsBtn);
     }
 
+    /**
+     * Creates the Search text areа.
+     */
     private void addSearchField() {
         searchField = new JTextField(25);
         searchField.setLayout(new BorderLayout());
@@ -79,6 +88,12 @@ public class Toolbar extends JToolBar implements ActionListener {
         add(searchField);
     }
 
+    /**
+     * Gets an ImageIcon by a given file path.
+     *
+     * @param fileName The icon file path
+     * @return the ImageIcon to be loaded
+     */
     private ImageIcon createIcon(String fileName) {
         URL url = getClass().getClassLoader().getResource(fileName);
         if (url == null) {
@@ -88,6 +103,10 @@ public class Toolbar extends JToolBar implements ActionListener {
         return icon;
     }
 
+    /**
+     * Sets events for the Search text area, which control the text label of the
+     * search field.
+     */
     private void addEventListeners() {
         iconLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -123,14 +142,29 @@ public class Toolbar extends JToolBar implements ActionListener {
         });
     }
 
+    /**
+     * Sets an event listener for button clicks.
+     *
+     * @param listener
+     */
     public void setToolbarButtonsListener(ToolbarButtonsEventListener listener) {
         this.buttonsEventListener = listener;
     }
 
+    /**
+     * Sets an event listener for entries in the Search text area (the filter).
+     *
+     * @param listener
+     */
     public void setTableFilterListener(TableFilteredListener listener) {
         this.tableFilteredListener = listener;
     }
 
+    /**
+     * An event fired upon a button click.
+     *
+     * @param e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton btnSource = (JButton) e.getSource();

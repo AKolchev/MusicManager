@@ -1,10 +1,6 @@
-/*
- * Main frame of the UI
- * Wires together all views and serves as a coordinator/controller of the presentation logic
- */
 package views;
 
-import controllers.Controller;
+import controllers.MainFrameController;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -30,14 +26,16 @@ import eventListeners.ToolbarButtonsEventListener;
 import utils.ProjectFileFilter;
 
 /**
+ * The MainFrame view. Wires together all the presentation logic
+ *
  * @author AKolchev, f55283
  */
-public class MainFrame extends JFrame {
+public class MainFrameView extends JFrame {
 
-    private Toolbar toolbar;
+    private ToolbarPartialView toolbar;
     private JFileChooser fileChooser;
-    private Controller controller;
-    private TablePanel tablePanel;
+    private MainFrameController controller;
+    private TablePanelPartialView tablePanel;
     private JMenuBar menuBar;
 
     private JMenu fileMenu;
@@ -51,9 +49,9 @@ public class MainFrame extends JFrame {
     private JCheckBoxMenuItem showToolbarMenuItem;
 
     /**
-     * MainFrame constructor Initializes all necessary components
+     * Initial construction of the view.
      */
-    public MainFrame() {
+    public MainFrameView() {
         super("Music Manager");
         setLookAndFeel();
         initializeFormComponents();
@@ -65,6 +63,9 @@ public class MainFrame extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Sets the layout of the view.
+     */
     private void setFormLayout() {
         setLayout(new BorderLayout());
         add(tablePanel, BorderLayout.CENTER);
@@ -74,13 +75,20 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     }
 
+    /**
+     * Initializes the components of the form.
+     */
     private void initializeFormComponents() {
-        toolbar = new Toolbar();
-        tablePanel = new TablePanel();
+        toolbar = new ToolbarPartialView();
+        tablePanel = new TablePanelPartialView();
         fileChooser = new JFileChooser();
-        controller = new Controller();
+        controller = new MainFrameController();
     }
 
+    /**
+     * Implements the main frame events. Row deleted, table filtered, reload
+     * music files, save music files, window closing.
+     */
     private void setFrameEvents() {
 
         tablePanel.setTableRowDeletedListener(new TableRowDeletedListener() {
@@ -93,7 +101,7 @@ public class MainFrame extends JFrame {
         toolbar.setTableFilterListener(new TableFilteredListener() {
             @Override
             public void tableFiltered(String filter) {
-                controller.filterMusicFilesTable(filter);
+                controller.filterMusicFiles(filter);
                 tablePanel.refresh();
             }
         });
@@ -120,8 +128,14 @@ public class MainFrame extends JFrame {
         });
     }
 
+    /**
+     * Reloads the music files metadata
+     */
     private void reloadMusicFiles() {
-        int action = JOptionPane.showConfirmDialog(MainFrame.this, "Any unsaved changes will be lost!", "Reload music files", JOptionPane.OK_CANCEL_OPTION);
+        String popupMessage = "Any unsaved changes will be lost!";
+        String popupTitle = "Reload music files";
+        int action = JOptionPane.showConfirmDialog(MainFrameView.this,
+                popupMessage, popupTitle, JOptionPane.OK_CANCEL_OPTION);
         if (action == JOptionPane.OK_OPTION) {
             controller.reloadMusicFiles();
             tablePanel.refresh();
@@ -144,6 +158,11 @@ public class MainFrame extends JFrame {
         }
     }
 
+    /**
+     * Creates a menu bar
+     *
+     * @return the menu bar
+     */
     private JMenuBar createMenuBar() {
 
         JMenuBar menuBar = constructMenuItems();
@@ -153,6 +172,11 @@ public class MainFrame extends JFrame {
         return menuBar;
     }
 
+    /**
+     * Constructs all the elements of the menu bar
+     *
+     * @return
+     */
     private JMenuBar constructMenuItems() {
 
         menuBar = new JMenuBar();
@@ -186,6 +210,11 @@ public class MainFrame extends JFrame {
         return menuBar;
     }
 
+    /**
+     * Implements menu events (Show toolbar, Set screen mode, Import music
+     * files, Save music files, Import Music Manager project, Export music
+     * manager project, Exit program)
+     */
     private void addMenuEventListeners() {
 
         showToolbarMenuItem.addActionListener(new ActionListener() {
@@ -238,12 +267,22 @@ public class MainFrame extends JFrame {
         });
     }
 
+    /**
+     * Sets the visibility of the toolbar
+     *
+     * @param e The action event data
+     */
     private void setToolbarVisibility(ActionEvent e) {
         JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();
         toolbar.setVisible(menuItem.isSelected());
 
     }
 
+    /**
+     * Sets the screen mode of the window
+     *
+     * @param e The action event data
+     */
     private void setScreenMode(ActionEvent e) {
         JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();
         if (menuItem.isSelected()) {
@@ -253,48 +292,67 @@ public class MainFrame extends JFrame {
         }
     }
 
+    /**
+     * Opens a file chooser for smusic files import into the application and
+     * invokes the controller for further actions with the file.
+     */
     private void importMusicFiles() {
         fileChooser.setFileFilter(new ImportSongsFileFilter());
         fileChooser.setMultiSelectionEnabled(true);
-        if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+        if (fileChooser.showOpenDialog(MainFrameView.this) == JFileChooser.APPROVE_OPTION) {
             fileChooser.setSelectedFile(new File(""));
             controller.loadMusicFiles(fileChooser.getSelectedFiles());
             tablePanel.refresh();
         }
     }
 
+    /**
+     * Opens a file chooser, for exporting the current state of the files
+     * metadata into an mmproj file and invokes the controller for further
+     * actions with the file.
+     */
     private void exportProject() {
         fileChooser.setFileFilter(new ProjectFileFilter());
         fileChooser.setSelectedFile(new File("My music manager project.mmproj"));
         fileChooser.setMultiSelectionEnabled(false);
-        if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+        if (fileChooser.showSaveDialog(MainFrameView.this) == JFileChooser.APPROVE_OPTION) {
             controller.saveProjectToFile(fileChooser.getSelectedFile());
         }
     }
 
+    /**
+     * Opens a filechooser window, for mmproj file import and ivokes the
+     * controller for further actions with the file.
+     */
     private void importProject() {
         fileChooser.setFileFilter(new ProjectFileFilter());
         fileChooser.setMultiSelectionEnabled(false);
-        if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+        if (fileChooser.showSaveDialog(MainFrameView.this) == JFileChooser.APPROVE_OPTION) {
             controller.loadProjectFromFile(fileChooser.getSelectedFile());
             tablePanel.refresh();
         }
     }
 
+    /**
+     * Controls the application exit event
+     */
     private void applicationExit() {
         String popUpMessage = "Do you really want to exit the application?";
         String popUpTitle = "Exit program";
-        int action = JOptionPane.showConfirmDialog(MainFrame.this, popUpMessage, popUpTitle, JOptionPane.OK_CANCEL_OPTION);
+        int action = JOptionPane.showConfirmDialog(MainFrameView.this, popUpMessage, popUpTitle, JOptionPane.OK_CANCEL_OPTION);
 
         if (action == JOptionPane.OK_OPTION) {
             WindowListener[] listeners = getWindowListeners();
 
             for (WindowListener listener : listeners) {
-                listener.windowClosing(new WindowEvent(MainFrame.this, 0));
+                listener.windowClosing(new WindowEvent(MainFrameView.this, 0));
             }
         }
     }
 
+    /**
+     * Creates mnemonics and accelerators, for ease of use
+     */
     private void setMenuShortKeys() {
         fileMenu.setMnemonic(KeyEvent.VK_F);
         importMusicFilesMenuItem.setMnemonic(KeyEvent.VK_I);

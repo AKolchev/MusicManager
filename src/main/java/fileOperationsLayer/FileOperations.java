@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package fileOperationsLayer;
 
 import java.io.File;
@@ -18,7 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import models.FlacCommentKeysEnum;
-import models.MusicFileTags;
+import models.MusicFileTagsModel;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -36,46 +31,71 @@ import utils.Helper;
 import utils.SortTableRows;
 
 /**
+ * Class containing all the file IO operations
  *
- * @author mgkon
+ * @author AKolchev, f55283
  */
 public class FileOperations {
 
-    private final List<MusicFileTags> musicFilesTags;
+    private final List<MusicFileTagsModel> musicFilesTags;
 
+    /**
+     * Class constructor. Initializes the musicFilesTags List collection
+     */
     public FileOperations() {
         this.musicFilesTags = new LinkedList<>();
     }
 
-//    public void addMusicFiles(MusicFileTags musicFileTags) {
-//
-//        musicFilesTags.add(musicFileTags);
-//    }
     /**
      *
-     * @return
+     * @return a collection of MusicFileTagsModel, containing the music file
+     * metadata entries
      */
-    public List<MusicFileTags> getMusicFilesTags() {
+    public List<MusicFileTagsModel> getMusicFilesTags() {
         return Collections.unmodifiableList(musicFilesTags);
     }
 
+    /**
+     * Saves the current state of the music files metadata entries into a
+     * MusicManager project file
+     *
+     * @param file The file into which the metadata entries state to be stored
+     * @throws IOException if there is an error while writing to the file
+     */
     public void saveProjectToFile(File file) throws IOException {
         FileOutputStream fos = new FileOutputStream(file);
         try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            MusicFileTags[] fileTags = musicFilesTags.toArray(new MusicFileTags[musicFilesTags.size()]);
+            MusicFileTagsModel[] fileTags = musicFilesTags.toArray(new MusicFileTagsModel[musicFilesTags.size()]);
             oos.writeObject(fileTags);
         }
     }
 
+    /**
+     * Loads a MusicManager project file, containing a stored state of music
+     * files metadata entries
+     *
+     * @param file The MusicManager file to be loaded
+     * @throws IOException if there is an error while reading the file
+     * @throws ClassNotFoundException if the metadata structure in the file is
+     * not compatible to the one used in the current version of the MusicManager
+     * application
+     */
     public void loadProjectFromFile(File file) throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream(file);
         try (java.io.ObjectInputStream ois = new ObjectInputStream(fis)) {
-            MusicFileTags[] fileTags = (MusicFileTags[]) ois.readObject();
+            MusicFileTagsModel[] fileTags = (MusicFileTagsModel[]) ois.readObject();
             musicFilesTags.clear();
             musicFilesTags.addAll(Arrays.asList(fileTags));
         }
     }
 
+    /**
+     * Filters the contents of the metadata collection, by applying a given key
+     * word
+     *
+     * @param filterKeyWord the key word/s, by which the contents of the
+     * metadata collection to be filtered
+     */
     public void filterMusicFiles(String filterKeyWord) {
         String filter = filterKeyWord.toLowerCase();
 
@@ -87,7 +107,6 @@ public class FileOperations {
                     || x.getAlbum().toLowerCase().contains(filter)
                     || x.getAlbumArtist().toLowerCase().contains(filter)
                     || x.getArtist().toLowerCase().contains(filter)
-                    || x.getComment().toLowerCase().contains(filter)
                     || x.getFileName().toLowerCase().contains(filter)
                     || x.getGenre().toLowerCase().contains(filter)
                     || String.valueOf(x.getYear()).toLowerCase().contains(filter)
@@ -96,6 +115,16 @@ public class FileOperations {
         Collections.sort(musicFilesTags, new SortTableRows());
     }
 
+    /**
+     * Reloads the contents of the music files metadata entries collection from
+     * the file system
+     *
+     * @throws CannotReadException
+     * @throws IOException
+     * @throws TagException
+     * @throws ReadOnlyFileException
+     * @throws InvalidAudioFrameException
+     */
     public void reloadMusicFiles() throws CannotReadException, IOException,
             TagException, ReadOnlyFileException, InvalidAudioFrameException {
         ArrayList<File> musicFiles = new ArrayList<>();
@@ -111,6 +140,19 @@ public class FileOperations {
         loadMusicFiles(files);
     }
 
+    /**
+     * Loads the metadata tags of given files into the file metadata collection
+     *
+     * @param files An array of files, from which the metadata tags to be
+     * extracted
+     *
+     * @throws CannotReadException If a file cannot be read
+     * @throws IOException If there is an error while reading a file
+     * @throws TagException If there is an error with one of the tags
+     * @throws ReadOnlyFileException In case of write operation over a read only
+     * file
+     * @throws InvalidAudioFrameException If a file contains an invalid frame
+     */
     public void loadMusicFiles(File[] files) throws CannotReadException, IOException,
             TagException, ReadOnlyFileException, InvalidAudioFrameException {
 
@@ -118,7 +160,7 @@ public class FileOperations {
             AudioFile audioFile = AudioFileIO.read(file);
             Tag fileTag = audioFile.getTag();
             if (fileTag != null) {
-                MusicFileTags fileTags = new MusicFileTags();
+                MusicFileTagsModel fileTags = new MusicFileTagsModel();
 
                 fileTags.setFileName(file.getName());
                 fileTags.setTitle(fileTag.getValue(FieldKey.TITLE, 0));
@@ -135,7 +177,7 @@ public class FileOperations {
                     String genre = Helper.getNormalizedGenreValue(genreValue);
                     fileTags.setGenre(genre);
                 }
-                fileTags.setComment(fileTag.getValue(FieldKey.COMMENT, 0));
+                
                 fileTags.setFileLocation(file.getCanonicalPath());
                 fileTags.setIsVisible(true);
                 musicFilesTags.add(fileTags);
@@ -144,10 +186,16 @@ public class FileOperations {
         Collections.sort(this.musicFilesTags, new SortTableRows());
     }
 
+    /**
+     * Removes given file/s from the metadata collection
+     *
+     * @param rows An int array, containing the positions of the rows to be
+     * removed from the metadata collection
+     */
     public void removeMusicFiles(int[] rows) {
         int rowCount = 0;
         List<Integer> rowsToBeDeleted = Helper.arrayToList(rows);
-        Iterator<MusicFileTags> collection = musicFilesTags.iterator();
+        Iterator<MusicFileTagsModel> collection = musicFilesTags.iterator();
         while (collection.hasNext()) {
             collection.next();
             if (rowsToBeDeleted.contains(rowCount)) {
@@ -157,8 +205,20 @@ public class FileOperations {
         }
     }
 
+    /**
+     * Saves the current state of the music file tags into the music files
+     *
+     * @throws CannotReadException If a file cannot be read
+     * @throws IOException If there is an error while reading a file
+     * @throws TagException If there is an error with one of the tags
+     * @throws ReadOnlyFileException In case of write operation over a read only
+     * file
+     * @throws InvalidAudioFrameException If a file contains an invalid frame
+     * @throws CannotWriteException In case of an error while writing into a
+     * file
+     */
     public void saveMusicFiles() throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException, CannotWriteException {
-        for (MusicFileTags fileTags : musicFilesTags) {
+        for (MusicFileTagsModel fileTags : musicFilesTags) {
             String fileExtension = Helper.getFileExtension(fileTags.getFileLocation());
             if (fileTags.getModified()) {
                 if ("mp3".equalsIgnoreCase(fileExtension)) {
@@ -170,7 +230,20 @@ public class FileOperations {
         }
     }
 
-    public void editMp3File(MusicFileTags fileTags) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException, CannotWriteException {
+    /**
+     * Edits mp3 files
+     *
+     * @param fileTags
+     * @throws CannotReadException If a file cannot be read
+     * @throws IOException If there is an error while reading a file
+     * @throws TagException If there is an error with one of the tags
+     * @throws ReadOnlyFileException In case of write operation over a read only
+     * file
+     * @throws InvalidAudioFrameException If a file contains an invalid frame
+     * @throws CannotWriteException In case of an error while writing into a
+     * file
+     */
+    private void editMp3File(MusicFileTagsModel fileTags) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException, CannotWriteException {
 
         String fileLocation = fileTags.getFileLocation();
         File file = new File(fileLocation);
@@ -194,15 +267,26 @@ public class FileOperations {
         if (fileTags.getGenre() != null) {
             tag.setField(FieldKey.GENRE, fileTags.getGenre());
         }
-        if (fileTags.getComment() != null) {
-            tag.setField(FieldKey.COMMENT, fileTags.getComment());
-        }
-
+      
         mp3File.commit();
         mp3File.save();
+        fileTags.setModified(false); //The file has already been saved
     }
 
-    public void editFlacFile(MusicFileTags fileTags) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException, CannotWriteException {
+    /**
+     * Edits flac files
+     *
+     * @param fileTags
+     * @throws CannotReadException If a file cannot be read
+     * @throws IOException If there is an error while reading a file
+     * @throws TagException If there is an error with one of the tags
+     * @throws ReadOnlyFileException In case of write operation over a read only
+     * file
+     * @throws InvalidAudioFrameException If a file contains an invalid frame
+     * @throws CannotWriteException In case of an error while writing into a
+     * file
+     */
+    private void editFlacFile(MusicFileTagsModel fileTags) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException, CannotWriteException {
         AudioFile audioFile = AudioFileIO.read(new File(fileTags.getFileLocation()));
         FlacTag tag = (FlacTag) audioFile.getTag();
         VorbisCommentTag vorbisTag = tag.getVorbisCommentTag();
@@ -227,10 +311,7 @@ public class FileOperations {
             vorbisTag.setField(FlacCommentKeysEnum.GENRE.toString(), fileTags.getGenre());
         }
 
-        if (fileTags.getComment() != null) {
-            vorbisTag.setField(FlacCommentKeysEnum.COMMENT.toString(), fileTags.getComment());
-        }
-
         audioFile.commit();
+        fileTags.setModified(false); //The file has already been saved
     }
 }
