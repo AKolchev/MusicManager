@@ -275,7 +275,6 @@ public class MainFrameView extends JFrame {
     private void setToolbarVisibility(ActionEvent e) {
         JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();
         toolbar.setVisible(menuItem.isSelected());
-
     }
 
     /**
@@ -293,7 +292,7 @@ public class MainFrameView extends JFrame {
     }
 
     /**
-     * Opens a file chooser for smusic files import into the application and
+     * Opens a file chooser for music files import into the application and
      * invokes the controller for further actions with the file.
      */
     private void importMusicFiles() {
@@ -360,6 +359,7 @@ public class MainFrameView extends JFrame {
         exportProjectMenuItem.setMnemonic(KeyEvent.VK_E);
         importProjectMenuItem.setMnemonic(KeyEvent.VK_P);
         exitMenuItem.setMnemonic(KeyEvent.VK_X);
+        viewMenu.setMnemonic(KeyEvent.VK_V);
         exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
     }
 }

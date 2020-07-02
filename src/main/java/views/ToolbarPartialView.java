@@ -56,7 +56,7 @@ public class ToolbarPartialView extends JToolBar implements ActionListener {
         reloadMusicFileTagsBtn = new JButton();
         reloadMusicFileTagsBtn.setLayout(new FlowLayout());
         reloadMusicFileTagsBtn.setIcon(createIcon("images/refresh-icon.png"));
-        reloadMusicFileTagsBtn.setToolTipText("Refresh music filess");
+        reloadMusicFileTagsBtn.setToolTipText("Refresh music files");
         reloadMusicFileTagsBtn.addActionListener(this);
         add(reloadMusicFileTagsBtn);
     }
@@ -68,7 +68,7 @@ public class ToolbarPartialView extends JToolBar implements ActionListener {
         saveMusicTagsBtn = new JButton();
         saveMusicTagsBtn.setLayout(new FlowLayout());
         saveMusicTagsBtn.setIcon(createIcon("images/refresh-icon.png"));
-        saveMusicTagsBtn.setToolTipText("Save music tagss");
+        saveMusicTagsBtn.setToolTipText("Save music tags");
         saveMusicTagsBtn.addActionListener(this);
         add(saveMusicTagsBtn);
     }
