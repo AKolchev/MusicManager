@@ -67,7 +67,7 @@ public class ToolbarPartialView extends JToolBar implements ActionListener {
     private void addSaveButton() {
         saveMusicTagsBtn = new JButton();
         saveMusicTagsBtn.setLayout(new FlowLayout());
-        saveMusicTagsBtn.setIcon(createIcon("images/refresh-icon.png"));
+        saveMusicTagsBtn.setIcon(createIcon("images/save-icon.png"));
         saveMusicTagsBtn.setToolTipText("Save music tags");
         saveMusicTagsBtn.addActionListener(this);
         add(saveMusicTagsBtn);
