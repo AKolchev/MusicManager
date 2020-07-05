@@ -31,6 +31,7 @@ public class ToolbarPartialView extends JToolBar implements ActionListener {
 
     private JButton reloadMusicFileTagsBtn;
     private JButton saveMusicTagsBtn;
+    private JButton importMusicTagsBtn;
     private JTextField searchField;
     private JLabel iconLabel;
     private ToolbarButtonsEventListener buttonsEventListener;
@@ -41,8 +42,9 @@ public class ToolbarPartialView extends JToolBar implements ActionListener {
      * The class constructor is used for the toolbar initialization.
      */
     public ToolbarPartialView() {
-        addReloadButton();
+        addImportButton();
         addSaveButton();
+        addReloadButton();
         add(Box.createHorizontalGlue());
         addSearchField();
         addEventListeners();
@@ -73,6 +75,18 @@ public class ToolbarPartialView extends JToolBar implements ActionListener {
         add(saveMusicTagsBtn);
     }
 
+    /**
+     * Creates the Import button.
+     */
+    private void addImportButton() {
+        importMusicTagsBtn = new JButton();
+        importMusicTagsBtn.setLayout(new FlowLayout());
+        importMusicTagsBtn.setIcon(createIcon("images/upload-icon.png"));
+        importMusicTagsBtn.setToolTipText("Import music files");
+        importMusicTagsBtn.addActionListener(this);
+        add(importMusicTagsBtn);
+    }
+    
     /**
      * Creates the Search text areа.
      */
@@ -174,6 +188,8 @@ public class ToolbarPartialView extends JToolBar implements ActionListener {
             buttonsEventListener.reloadMusicFilesEvent();
         } else if (btnSource == saveMusicTagsBtn) {
             buttonsEventListener.saveMusicFilesEvent();
+        } else if (btnSource == importMusicTagsBtn) {
+            buttonsEventListener.importMusicFilesEvent();
         }
     }
 }

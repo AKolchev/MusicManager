@@ -18,4 +18,10 @@ public interface ToolbarButtonsEventListener {
      * Music files metadata to be reloaded from the file system
      */
     public void reloadMusicFilesEvent();
+    
+    /**
+     * An event fired upon Import button click
+     * Music files metadata to be loaded from the file system
+     */
+    public void importMusicFilesEvent();
 }

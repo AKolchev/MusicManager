@@ -117,6 +117,11 @@ public class MainFrameView extends JFrame {
             public void saveMusicFilesEvent() {
                 controller.saveMusicFiles();
             }
+            
+            @Override
+            public void importMusicFilesEvent() {
+                importMusicFiles();
+            }
         });
 
         addWindowListener(new WindowAdapter() {
