@@ -175,7 +175,7 @@ public class MainFrameView extends JFrame {
     /**
      * Constructs all the elements of the menu bar
      *
-     * @return
+     * @return the constructed MenuBar
      */
     private JMenuBar constructMenuItems() {
 

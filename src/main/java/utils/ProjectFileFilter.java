@@ -15,7 +15,7 @@ public class ProjectFileFilter extends FileFilter {
      * Filters files by supported extensions (mmproj)
      *
      * @param file The Files to be filtered
-     * @return
+     * @return Boolean value, indicating if a given file is of type .mmproj or not
      */
     @Override
     public boolean accept(File file) {
@@ -29,8 +29,7 @@ public class ProjectFileFilter extends FileFilter {
     /**
      * Sets a description in the file chooser window
      *
-     * @param The description message
-     * @return
+     * @return The description message
      */
     @Override
     public String getDescription() {

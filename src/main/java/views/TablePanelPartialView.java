@@ -92,7 +92,8 @@ public class TablePanelPartialView extends JTable {
     /**
      * Sets a listener for deleted table rows
      *
-     * @param listener
+     * @param listener An instance of TableRowDeletedListener, acting as a
+     * listener for table row deletions inside the TablePanelPartialView
      */
     public void setTableRowDeletedListener(TableRowDeletedListener listener) {
         this.tableRowDeletedListener = listener;

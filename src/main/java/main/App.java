@@ -12,6 +12,8 @@ import views.MainFrameView;
 public class App {
 
     /**
+     * Application entry point
+     * 
      * @param args initial input arguments
      */
     public static void main(String[] args) {

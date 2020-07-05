@@ -145,7 +145,8 @@ public class ToolbarPartialView extends JToolBar implements ActionListener {
     /**
      * Sets an event listener for button clicks.
      *
-     * @param listener
+     * @param listener An instance of ToolbarButtnosEventListener, acting as
+     * a listener for toolbar button clicks inside the ToolbarPartialView
      */
     public void setToolbarButtonsListener(ToolbarButtonsEventListener listener) {
         this.buttonsEventListener = listener;
@@ -154,7 +155,8 @@ public class ToolbarPartialView extends JToolBar implements ActionListener {
     /**
      * Sets an event listener for entries in the Search text area (the filter).
      *
-     * @param listener
+     * @param listener An instance of TableFilteredListener, acting as a 
+     * listener for table rows filtering
      */
     public void setTableFilterListener(TableFilteredListener listener) {
         this.tableFilteredListener = listener;
@@ -163,7 +165,7 @@ public class ToolbarPartialView extends JToolBar implements ActionListener {
     /**
      * An event fired upon a button click.
      *
-     * @param e
+     * @param e The ActionEvent information, stored for the event
      */
     @Override
     public void actionPerformed(ActionEvent e) {

@@ -15,7 +15,7 @@ public class ImportSongsFileFilter extends FileFilter {
      * Filters files by supported extensions (mp3 and flac)
      *
      * @param file The Files to be filtered
-     * @return
+     * @return Boolean value, indicating if a given file is of type mp3 or flac, or not
      */
     @Override
     public boolean accept(File file) {

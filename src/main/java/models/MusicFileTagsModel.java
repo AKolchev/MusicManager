@@ -23,7 +23,7 @@ public class MusicFileTagsModel implements Serializable {
     private boolean isVisible;
 
     /**
-     *
+     * Gets the track album
      * @return the name of the track album
      */
     public String getAlbum() {
@@ -40,7 +40,8 @@ public class MusicFileTagsModel implements Serializable {
     }
 
     /**
-     *
+     * Gets the track artist
+     * 
      * @return the name of the track artist
      */
     public String getArtist() {
@@ -64,7 +65,8 @@ public class MusicFileTagsModel implements Serializable {
     }
 
     /**
-     *
+     * Gets the track title
+     * 
      * @return The title of the track
      */
     public String getTitle() {
@@ -81,7 +83,8 @@ public class MusicFileTagsModel implements Serializable {
     }
 
     /**
-     *
+     * Gets the album artist 
+     * 
      * @return The name of the album artist
      */
     public String getAlbumArtist() {
@@ -98,7 +101,8 @@ public class MusicFileTagsModel implements Serializable {
     }
 
     /**
-     *
+     * Gets the track year
+     * 
      * @return The year of the track
      */
     public int getYear() {
@@ -124,7 +128,8 @@ public class MusicFileTagsModel implements Serializable {
     }
 
     /**
-     *
+     * Gets the track genre
+     * 
      * @return the track genre
      */
     public String getGenre() {
@@ -142,7 +147,8 @@ public class MusicFileTagsModel implements Serializable {
     }
 
     /**
-     *
+     * Gets information if the data entity has been modified
+     * 
      * @return Whether the music file metadata has been modified and not saved
      * yet
      */
@@ -186,7 +192,7 @@ public class MusicFileTagsModel implements Serializable {
     }
 
     /**
-     * Sets whether the music file metadata visibility
+     * Sets the music file metadata entity visibility
      *
      * @param isVisible Indicates whether the music file metadata must be
      * visible
@@ -196,7 +202,8 @@ public class MusicFileTagsModel implements Serializable {
     }
 
     /**
-     *
+     * Gets the music file metadata entity visibility
+     * 
      * @return If the music file metadata is visible
      */
     public boolean getIsVisible() {

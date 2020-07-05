@@ -44,7 +44,8 @@ public enum FlacCommentKeysEnum {
     }
 
     /**
-     *
+     * Override of toString method.
+     * 
      * @return The comment key
      */
     @Override

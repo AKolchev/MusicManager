@@ -15,7 +15,7 @@ public class Helper {
      * Gets the extension of a given file
      *
      * @param name The name of the file
-     * @return
+     * @return the extension of a given file
      */
     public static String getFileExtension(String name) {
         int pointIndex = name.lastIndexOf(".");
@@ -36,7 +36,7 @@ public class Helper {
      * is not a numeric value
      *
      * @param inputString
-     * @return
+     * @return parsed integer
      */
     public static Integer tryParseInt(String inputString) {
         try {
@@ -50,7 +50,7 @@ public class Helper {
      * Converts a given int array to list
      *
      * @param intArray the int array to be converted to a list
-     * @return a list of ints
+     * @return converted int[] to a list of ints
      */
     public static List<Integer> arrayToList(int[] intArray) {
         List<Integer> newArray = new ArrayList<>();
@@ -66,7 +66,7 @@ public class Helper {
      * multiple genres per track
      *
      * @param genreValue The track genre to be normalized
-     * @return a normalized genre value
+     * @return The normalized genre value
      */
     public static String getNormalizedGenreValue(String genreValue) {
         StringBuilder genre = new StringBuilder();

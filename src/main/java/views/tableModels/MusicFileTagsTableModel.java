@@ -81,7 +81,8 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
     }
 
     /**
-     *
+     * Gets the count of table rows
+     * 
      * @return the number of table rows
      */
     @Override
@@ -91,8 +92,8 @@ public class MusicFileTagsTableModel extends AbstractTableModel {
     }
 
     /**
-     *
-     * @return the number of table columns
+     * Gets the count of table columns
+     * @return The number of table columns
      */
     @Override
     public int getColumnCount() {
